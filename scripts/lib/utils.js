@@ -165,11 +165,8 @@ function findFiles(dir, pattern, options = {}) {
           searchDir(fullPath);
         }
       }
-    } catch (err) {
-      // 记录权限错误用于调试
-      if (err.code === 'EACCES' || err.code === 'EPERM') {
-        // 静默跳过权限被拒绝的错误
-      }
+    } catch (_err) {
+      // Ignore permission errors
     }
   }
 

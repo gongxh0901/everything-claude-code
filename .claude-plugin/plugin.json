@@ -1,6 +1,6 @@
 {
   "name": "everything-claude-code-zh",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "完整收集经过实战检验的 Claude Code 配置（中文版） - 来自 Anthropic 黑客马拉松获奖者，包含代理、技能、钩子、命令和规则，经过 10+ 个月密集日常使用演进",
   "author": {
     "name": "gongxh0901",
@@ -16,7 +16,6 @@
     "agents",
     "skills",
     "hooks",
-    "commands",
     "rules",
     "tdd",
     "code-review",
@@ -26,8 +25,7 @@
     "best-practices",
     "chinese"
   ],
-  "commands": ["./commands/"],
-  "skills": ["./skills/"],
+  "skills": ["./skills/", "./commands/"],
   "agents": [
     "./agents/architect.md",
     "./agents/build-error-resolver.md",

@@ -51,9 +51,8 @@ process.stdin.on('end', () => {
     if (hasConsole) {
       console.error('[钩子] 请在提交前移除 console.log 语句');
     }
-  } catch (error) {
+  } catch (_error) {
     // 静默忽略错误（git 可能不可用等）
-    console.error('[钩子] 检查 console.log 时出错:', error.message);
   }
 
   // 始终输出原始数据

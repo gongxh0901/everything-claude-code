@@ -113,16 +113,19 @@ async function runTests() {
     // Run the script
     await runScript(path.join(scriptsDir, 'session-end.js'));
 
-    // Check if session file was created (default session ID)
+    // Check if session file was created
+    // Note: Without CLAUDE_SESSION_ID, falls back to project name (not 'default')
     // Use local time to match the script's getDateString() function
     const sessionsDir = path.join(os.homedir(), '.claude', 'sessions');
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    // session-end.js uses getSessionIdShort() which returns project name when no session ID
-    // In CI, it uses the project name which varies, so we just check for any session file created today
-    const files = fs.readdirSync(sessionsDir).filter(f => f.startsWith(today) && f.endsWith('-session.tmp'));
 
-    assert.ok(files.length > 0, 'Session file should exist for today');
+    // Get the expected session ID (project name fallback)
+    const utils = require('../../scripts/lib/utils');
+    const expectedId = utils.getSessionIdShort();
+    const sessionFile = path.join(sessionsDir, `${today}-${expectedId}-session.tmp`);
+
+    assert.ok(fs.existsSync(sessionFile), `Session file should exist: ${sessionFile}`);
   })) passed++; else failed++;
 
   if (await asyncTest('includes session ID in filename', async () => {
@@ -298,7 +301,7 @@ async function runTests() {
       }
     };
 
-    for (const [_eventType, hookArray] of Object.entries(hooks.hooks)) {
+    for (const [, hookArray] of Object.entries(hooks.hooks)) {
       checkHooks(hookArray);
     }
   })) passed++; else failed++;
@@ -322,7 +325,7 @@ async function runTests() {
       }
     };
 
-    for (const [_eventType, hookArray] of Object.entries(hooks.hooks)) {
+    for (const [, hookArray] of Object.entries(hooks.hooks)) {
       checkHooks(hookArray);
     }
   })) passed++; else failed++;
