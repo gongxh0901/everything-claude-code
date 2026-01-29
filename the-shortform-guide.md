@@ -1,54 +1,54 @@
-# The Shorthand Guide to Everything Claude Code
+# Everything Claude Code 快速指南
 
 ![Header: Anthropic Hackathon Winner - Tips & Tricks for Claude Code](./assets/images/shortform/00-header.png)
 
 ---
 
-**Been an avid Claude Code user since the experimental rollout in Feb, and won the Anthropic x Forum Ventures hackathon with [zenith.chat](https://zenith.chat) alongside [@DRodriguezFX](https://x.com/DRodriguezFX) - completely using Claude Code.**
+**我从 2 月的实验性推出阶段就开始热衷使用 Claude Code,并与 [@DRodriguezFX](https://x.com/DRodriguezFX) 一起赢得了 Anthropic x Forum Ventures 黑客马拉松,构建了 [zenith.chat](https://zenith.chat) - 完全使用 Claude Code。**
 
-Here's my complete setup after 10 months of daily use: skills, hooks, subagents, MCPs, plugins, and what actually works.
+这是我经过 10 个月日常使用后的完整设置：skills、hooks、subagents、MCPs、plugins,以及真正有效的东西。
 
 ---
 
-## Skills and Commands
+## Skills 和 Commands
 
-Skills operate like rules, constricted to certain scopes and workflows. They're shorthand to prompts when you need to execute a particular workflow.
+Skills 的运作类似于 rules,但限制在特定的范围和工作流中。当你需要执行特定工作流时,它们是提示的简写。
 
-After a long session of coding with Opus 4.5, you want to clean out dead code and loose .md files? Run `/refactor-clean`. Need testing? `/tdd`, `/e2e`, `/test-coverage`. Skills can also include codemaps - a way for Claude to quickly navigate your codebase without burning context on exploration.
+在使用 Opus 4.5 进行长时间编码后,想要清理死代码和零散的 .md 文件？运行 `/refactor-clean`。需要测试？`/tdd`、`/e2e`、`/test-coverage`。Skills 还可以包含 codemaps - 一种让 Claude 快速导航代码库而不消耗上下文的方式。
 
 ![Terminal showing chained commands](./assets/images/shortform/02-chaining-commands.jpeg)
-*Chaining commands together*
+*链式命令*
 
-Commands are skills executed via slash commands. They overlap but are stored differently:
+Commands 是通过斜杠命令执行的 skills。它们有重叠但存储方式不同：
 
-- **Skills**: `~/.claude/skills/` - broader workflow definitions
-- **Commands**: `~/.claude/commands/` - quick executable prompts
+- **Skills**: `~/.claude/skills/` - 更广泛的工作流定义
+- **Commands**: `~/.claude/commands/` - 快速可执行的提示
 
 ```bash
-# Example skill structure
+# Skill 结构示例
 ~/.claude/skills/
-  pmx-guidelines.md      # Project-specific patterns
-  coding-standards.md    # Language best practices
-  tdd-workflow/          # Multi-file skill with README.md
-  security-review/       # Checklist-based skill
+  pmx-guidelines.md      # 项目特定模式
+  coding-standards.md    # 语言最佳实践
+  tdd-workflow/          # 包含 README.md 的多文件 skill
+  security-review/       # 基于检查清单的 skill
 ```
 
 ---
 
 ## Hooks
 
-Hooks are trigger-based automations that fire on specific events. Unlike skills, they're constricted to tool calls and lifecycle events.
+Hooks 是基于触发器的自动化,在特定事件时触发。与 skills 不同,它们限制在工具调用和生命周期事件中。
 
-**Hook Types:**
+**Hook 类型：**
 
-1. **PreToolUse** - Before a tool executes (validation, reminders)
-2. **PostToolUse** - After a tool finishes (formatting, feedback loops)
-3. **UserPromptSubmit** - When you send a message
-4. **Stop** - When Claude finishes responding
-5. **PreCompact** - Before context compaction
-6. **Notification** - Permission requests
+1. **PreToolUse** - 工具执行前（验证、提醒）
+2. **PostToolUse** - 工具完成后（格式化、反馈循环）
+3. **UserPromptSubmit** - 发送消息时
+4. **Stop** - Claude 响应完成时
+5. **PreCompact** - 上下文压缩前
+6. **Notification** - 权限请求
 
-**Example: tmux reminder before long-running commands**
+**示例：长时间运行命令前的 tmux 提醒**
 
 ```json
 {
@@ -67,83 +67,83 @@ Hooks are trigger-based automations that fire on specific events. Unlike skills,
 ```
 
 ![PostToolUse hook feedback](./assets/images/shortform/03-posttooluse-hook.png)
-*Example of what feedback you get in Claude Code, while running a PostToolUse hook*
+*在 Claude Code 中运行 PostToolUse hook 时得到的反馈示例*
 
-**Pro tip:** Use the `hookify` plugin to create hooks conversationally instead of writing JSON manually. Run `/hookify` and describe what you want.
+**专业提示：** 使用 `hookify` 插件以对话方式创建钩子,而不是手动编写 JSON。运行 `/hookify` 并描述你想要的功能。
 
 ---
 
 ## Subagents
 
-Subagents are processes your orchestrator (main Claude) can delegate tasks to with limited scopes. They can run in background or foreground, freeing up context for the main agent.
+Subagents 是你的编排器（主 Claude）可以委派任务的进程,具有有限的范围。它们可以在后台或前台运行,为主代理释放上下文。
 
-Subagents work nicely with skills - a subagent capable of executing a subset of your skills can be delegated tasks and use those skills autonomously. They can also be sandboxed with specific tool permissions.
+Subagents 与 skills 配合良好 - 能够执行你技能子集的 subagent 可以被委派任务并自主使用这些技能。它们还可以使用特定的工具权限进行沙箱化。
 
 ```bash
-# Example subagent structure
+# Subagent 结构示例
 ~/.claude/agents/
-  planner.md           # Feature implementation planning
-  architect.md         # System design decisions
-  tdd-guide.md         # Test-driven development
-  code-reviewer.md     # Quality/security review
-  security-reviewer.md # Vulnerability analysis
+  planner.md           # 功能实现规划
+  architect.md         # 系统设计决策
+  tdd-guide.md         # 测试驱动开发
+  code-reviewer.md     # 质量/安全审查
+  security-reviewer.md # 漏洞分析
   build-error-resolver.md
   e2e-runner.md
   refactor-cleaner.md
 ```
 
-Configure allowed tools, MCPs, and permissions per subagent for proper scoping.
+为每个 subagent 配置允许的工具、MCP 和权限以实现正确的范围。
 
 ---
 
-## Rules and Memory
+## Rules 和 Memory
 
-Your `.rules` folder holds `.md` files with best practices Claude should ALWAYS follow. Two approaches:
+你的 `.rules` 文件夹包含 `.md` 文件,其中包含 Claude 应始终遵循的最佳实践。两种方法：
 
-1. **Single CLAUDE.md** - Everything in one file (user or project level)
-2. **Rules folder** - Modular `.md` files grouped by concern
+1. **单个 CLAUDE.md** - 所有内容在一个文件中（用户或项目级别）
+2. **Rules 文件夹** - 按关注点分组的模块化 `.md` 文件
 
 ```bash
 ~/.claude/rules/
-  security.md      # No hardcoded secrets, validate inputs
-  coding-style.md  # Immutability, file organization
-  testing.md       # TDD workflow, 80% coverage
-  git-workflow.md  # Commit format, PR process
-  agents.md        # When to delegate to subagents
-  performance.md   # Model selection, context management
+  security.md      # 禁止硬编码秘密,验证输入
+  coding-style.md  # 不可变性,文件组织
+  testing.md       # TDD 工作流,80% 覆盖率
+  git-workflow.md  # 提交格式,PR 流程
+  agents.md        # 何时委派给 subagents
+  performance.md   # 模型选择,上下文管理
 ```
 
-**Example rules:**
+**规则示例：**
 
-- No emojis in codebase
-- Refrain from purple hues in frontend
-- Always test code before deployment
-- Prioritize modular code over mega-files
-- Never commit console.logs
+- 代码库中不使用表情符号
+- 前端避免紫色色调
+- 部署前始终测试代码
+- 优先选择模块化代码而非超大文件
+- 永远不提交 console.logs
 
 ---
 
 ## MCPs (Model Context Protocol)
 
-MCPs connect Claude to external services directly. Not a replacement for APIs - it's a prompt-driven wrapper around them, allowing more flexibility in navigating information.
+MCPs 将 Claude 直接连接到外部服务。不是 API 的替代品 - 它是围绕它们的提示驱动包装器,允许在导航信息时具有更大的灵活性。
 
-**Example:** Supabase MCP lets Claude pull specific data, run SQL directly upstream without copy-paste. Same for databases, deployment platforms, etc.
+**示例：** Supabase MCP 让 Claude 提取特定数据,直接在上游运行 SQL 而无需复制粘贴。数据库、部署平台等也是如此。
 
 ![Supabase MCP listing tables](./assets/images/shortform/04-supabase-mcp.jpeg)
-*Example of the Supabase MCP listing the tables within the public schema*
+*Supabase MCP 列出 public schema 中的表的示例*
 
-**Chrome in Claude:** is a built-in plugin MCP that lets Claude autonomously control your browser - clicking around to see how things work.
+**Chrome in Claude：** 是一个内置的插件 MCP,让 Claude 自主控制你的浏览器 - 点击查看事物如何工作。
 
-**CRITICAL: Context Window Management**
+**关键：上下文窗口管理**
 
-Be picky with MCPs. I keep all MCPs in user config but **disable everything unused**. Navigate to `/plugins` and scroll down or run `/mcp`.
+对 MCPs 要挑剔。我在用户配置中保留所有 MCP,但**禁用所有未使用的**。导航到 `/plugins` 并向下滚动或运行 `/mcp`。
 
 ![/plugins interface](./assets/images/shortform/05-plugins-interface.jpeg)
-*Using /plugins to navigate to MCPs to see which ones are currently installed and their status*
+*使用 /plugins 导航到 MCPs 以查看当前安装的 MCPs 及其状态*
 
-Your 200k context window before compacting might only be 70k with too many tools enabled. Performance degrades significantly.
+如果启用太多工具,你的 200k 上下文窗口在压缩前可能只有 70k。性能会显著下降。
 
-**Rule of thumb:** Have 20-30 MCPs in config, but keep under 10 enabled / under 80 tools active.
+**经验法则：** 在配置中有 20-30 个 MCP,但保持启用少于 10 个 / 活动工具少于 80 个。
 
 ```bash
 # Check enabled MCPs
@@ -156,159 +156,159 @@ Your 200k context window before compacting might only be 70k with too many tools
 
 ## Plugins
 
-Plugins package tools for easy installation instead of tedious manual setup. A plugin can be a skill + MCP combined, or hooks/tools bundled together.
+Plugins 打包工具以便于安装,而不是繁琐的手动设置。一个插件可以是 skill + MCP 的组合,或者是钩子/工具的捆绑。
 
-**Installing plugins:**
+**安装插件：**
 
 ```bash
-# Add a marketplace
+# 添加市场
 claude plugin marketplace add https://github.com/mixedbread-ai/mgrep
 
-# Open Claude, run /plugins, find new marketplace, install from there
+# 打开 Claude,运行 /plugins,找到新市场,从那里安装
 ```
 
 ![Marketplaces tab showing mgrep](./assets/images/shortform/06-marketplaces-mgrep.jpeg)
-*Displaying the newly installed Mixedbread-Grep marketplace*
+*显示新安装的 Mixedbread-Grep 市场*
 
-**LSP Plugins** are particularly useful if you run Claude Code outside editors frequently. Language Server Protocol gives Claude real-time type checking, go-to-definition, and intelligent completions without needing an IDE open.
+**LSP Plugins** 特别有用,如果你经常在编辑器外运行 Claude Code。Language Server Protocol 为 Claude 提供实时类型检查、跳转到定义和智能补全,无需打开 IDE。
 
 ```bash
-# Enabled plugins example
-typescript-lsp@claude-plugins-official  # TypeScript intelligence
-pyright-lsp@claude-plugins-official     # Python type checking
-hookify@claude-plugins-official         # Create hooks conversationally
-mgrep@Mixedbread-Grep                   # Better search than ripgrep
+# 已启用插件示例
+typescript-lsp@claude-plugins-official  # TypeScript 智能提示
+pyright-lsp@claude-plugins-official     # Python 类型检查
+hookify@claude-plugins-official         # 对话式创建钩子
+mgrep@Mixedbread-Grep                   # 比 ripgrep 更好的搜索
 ```
 
-Same warning as MCPs - watch your context window.
+与 MCPs 相同的警告 - 注意你的上下文窗口。
 
 ---
 
-## Tips and Tricks
+## 技巧和窍门
 
-### Keyboard Shortcuts
+### 键盘快捷键
 
-- `Ctrl+U` - Delete entire line (faster than backspace spam)
-- `!` - Quick bash command prefix
-- `@` - Search for files
-- `/` - Initiate slash commands
-- `Shift+Enter` - Multi-line input
-- `Tab` - Toggle thinking display
-- `Esc Esc` - Interrupt Claude / restore code
+- `Ctrl+U` - 删除整行（比疯狂按退格键更快）
+- `!` - 快速 bash 命令前缀
+- `@` - 搜索文件
+- `/` - 启动斜杠命令
+- `Shift+Enter` - 多行输入
+- `Tab` - 切换思考显示
+- `Esc Esc` - 中断 Claude / 恢复代码
 
-### Parallel Workflows
+### 并行工作流
 
-- **Fork** (`/fork`) - Fork conversations to do non-overlapping tasks in parallel instead of spamming queued messages
-- **Git Worktrees** - For overlapping parallel Claudes without conflicts. Each worktree is an independent checkout
+- **Fork** (`/fork`) - Fork 对话以并行执行非重叠任务,而不是排队发送消息
+- **Git Worktrees** - 用于重叠的并行 Claude 而不会产生冲突。每个 worktree 都是独立的检出
 
 ```bash
 git worktree add ../feature-branch feature-branch
-# Now run separate Claude instances in each worktree
+# 现在在每个 worktree 中运行单独的 Claude 实例
 ```
 
-### tmux for Long-Running Commands
+### 长时间运行命令使用 tmux
 
-Stream and watch logs/bash processes Claude runs:
+流式传输和观察 Claude 运行的日志/bash 进程：
 
 https://github.com/user-attachments/assets/shortform/07-tmux-video.mp4
 
 ```bash
 tmux new -s dev
-# Claude runs commands here, you can detach and reattach
+# Claude 在这里运行命令,你可以分离和重新连接
 tmux attach -t dev
 ```
 
 ### mgrep > grep
 
-`mgrep` is a significant improvement from ripgrep/grep. Install via plugin marketplace, then use the `/mgrep` skill. Works with both local search and web search.
+`mgrep` 是对 ripgrep/grep 的重大改进。通过插件市场安装,然后使用 `/mgrep` 技能。支持本地搜索和网络搜索。
 
 ```bash
-mgrep "function handleSubmit"  # Local search
-mgrep --web "Next.js 15 app router changes"  # Web search
+mgrep "function handleSubmit"  # 本地搜索
+mgrep --web "Next.js 15 app router changes"  # 网络搜索
 ```
 
-### Other Useful Commands
+### 其他有用的命令
 
-- `/rewind` - Go back to a previous state
-- `/statusline` - Customize with branch, context %, todos
-- `/checkpoints` - File-level undo points
-- `/compact` - Manually trigger context compaction
+- `/rewind` - 返回到以前的状态
+- `/statusline` - 使用分支、上下文 %、待办事项自定义
+- `/checkpoints` - 文件级撤销点
+- `/compact` - 手动触发上下文压缩
 
 ### GitHub Actions CI/CD
 
-Set up code review on your PRs with GitHub Actions. Claude can review PRs automatically when configured.
+在 PR 上使用 GitHub Actions 设置代码审查。配置后,Claude 可以自动审查 PR。
 
 ![Claude bot approving a PR](./assets/images/shortform/08-github-pr-review.jpeg)
-*Claude approving a bug fix PR*
+*Claude 批准 bug 修复 PR*
 
-### Sandboxing
+### 沙箱化
 
-Use sandbox mode for risky operations - Claude runs in restricted environment without affecting your actual system.
+对于风险操作使用沙箱模式 - Claude 在受限环境中运行,不会影响你的实际系统。
 
 ---
 
-## On Editors
+## 关于编辑器
 
-Your editor choice significantly impacts Claude Code workflow. While Claude Code works from any terminal, pairing it with a capable editor unlocks real-time file tracking, quick navigation, and integrated command execution.
+你的编辑器选择会显著影响 Claude Code 工作流。虽然 Claude Code 可以从任何终端工作,但与功能强大的编辑器配对可以解锁实时文件跟踪、快速导航和集成命令执行。
 
-### Zed (My Preference)
+### Zed（我的偏好）
 
-I use [Zed](https://zed.dev) - written in Rust, so it's genuinely fast. Opens instantly, handles massive codebases without breaking a sweat, and barely touches system resources.
+我使用 [Zed](https://zed.dev) - 用 Rust 编写,因此真正快速。立即打开,处理大型代码库而不出问题,几乎不占用系统资源。
 
-**Why Zed + Claude Code is a great combo:**
+**为什么 Zed + Claude Code 是很好的组合：**
 
-- **Speed** - Rust-based performance means no lag when Claude is rapidly editing files. Your editor keeps up
-- **Agent Panel Integration** - Zed's Claude integration lets you track file changes in real-time as Claude edits. Jump between files Claude references without leaving the editor
-- **CMD+Shift+R Command Palette** - Quick access to all your custom slash commands, debuggers, build scripts in a searchable UI
-- **Minimal Resource Usage** - Won't compete with Claude for RAM/CPU during heavy operations. Important when running Opus
-- **Vim Mode** - Full vim keybindings if that's your thing
+- **速度** - 基于 Rust 的性能意味着当 Claude 快速编辑文件时没有延迟。你的编辑器跟得上
+- **Agent Panel 集成** - Zed 的 Claude 集成让你在 Claude 编辑时实时跟踪文件更改。在不离开编辑器的情况下在 Claude 引用的文件之间跳转
+- **CMD+Shift+R 命令面板** - 在可搜索的 UI 中快速访问所有自定义斜杠命令、调试器、构建脚本
+- **最小资源使用** - 在重度操作期间不会与 Claude 竞争 RAM/CPU。运行 Opus 时很重要
+- **Vim 模式** - 如果你喜欢,完整的 vim 键绑定
 
 ![Zed Editor with custom commands](./assets/images/shortform/09-zed-editor.jpeg)
-*Zed Editor with custom commands dropdown using CMD+Shift+R. Following mode shown as the bullseye in the bottom right.*
+*Zed 编辑器使用 CMD+Shift+R 的自定义命令下拉菜单。右下角的靶心显示了跟随模式。*
 
-**Editor-Agnostic Tips:**
+**编辑器无关的提示：**
 
-1. **Split your screen** - Terminal with Claude Code on one side, editor on the other
-2. **Ctrl + G** - quickly open the file Claude is currently working on in Zed
-3. **Auto-save** - Enable autosave so Claude's file reads are always current
-4. **Git integration** - Use editor's git features to review Claude's changes before committing
-5. **File watchers** - Most editors auto-reload changed files, verify this is enabled
+1. **分屏** - 一侧是带有 Claude Code 的终端,另一侧是编辑器
+2. **Ctrl + G** - 在 Zed 中快速打开 Claude 当前正在处理的文件
+3. **自动保存** - 启用自动保存,以便 Claude 的文件读取始终是最新的
+4. **Git 集成** - 在提交之前使用编辑器的 git 功能审查 Claude 的更改
+5. **文件监视器** - 大多数编辑器会自动重新加载更改的文件,验证这是否已启用
 
 ### VSCode / Cursor
 
-This is also a viable choice and works well with Claude Code. You can use it in either terminal format, with automatic sync with your editor using `\ide` enabling LSP functionality (somewhat redundant with plugins now). Or you can opt for the extension which is more integrated with the Editor and has a matching UI.
+这也是一个可行的选择,与 Claude Code 配合良好。你可以在终端格式中使用它,使用 `\ide` 启用 LSP 功能与编辑器自动同步（现在与插件有些冗余）。或者你可以选择扩展,它与编辑器更集成并具有匹配的 UI。
 
 ![VS Code Claude Code Extension](./assets/images/shortform/10-vscode-extension.jpeg)
-*The VS Code extension provides a native graphical interface for Claude Code, integrated directly into your IDE.*
+*VS Code 扩展为 Claude Code 提供了原生图形界面,直接集成到你的 IDE 中。*
 
 ---
 
-## My Setup
+## 我的设置
 
 ### Plugins
 
-**Installed:** (I usually only have 4-5 of these enabled at a time)
+**已安装：**（我通常一次只启用其中 4-5 个）
 
 ```markdown
-ralph-wiggum@claude-code-plugins       # Loop automation
-frontend-design@claude-code-plugins    # UI/UX patterns
-commit-commands@claude-code-plugins    # Git workflow
-security-guidance@claude-code-plugins  # Security checks
-pr-review-toolkit@claude-code-plugins  # PR automation
-typescript-lsp@claude-plugins-official # TS intelligence
-hookify@claude-plugins-official        # Hook creation
+ralph-wiggum@claude-code-plugins       # 循环自动化
+frontend-design@claude-code-plugins    # UI/UX 模式
+commit-commands@claude-code-plugins    # Git 工作流
+security-guidance@claude-code-plugins  # 安全检查
+pr-review-toolkit@claude-code-plugins  # PR 自动化
+typescript-lsp@claude-plugins-official # TS 智能提示
+hookify@claude-plugins-official        # 钩子创建
 code-simplifier@claude-plugins-official
 feature-dev@claude-code-plugins
 explanatory-output-style@claude-code-plugins
 code-review@claude-code-plugins
-context7@claude-plugins-official       # Live documentation
-pyright-lsp@claude-plugins-official    # Python types
-mgrep@Mixedbread-Grep                  # Better search
+context7@claude-plugins-official       # 实时文档
+pyright-lsp@claude-plugins-official    # Python 类型
+mgrep@Mixedbread-Grep                  # 更好的搜索
 ```
 
 ### MCP Servers
 
-**Configured (User Level):**
+**已配置（用户级别）：**
 
 ```json
 {
@@ -336,9 +336,9 @@ mgrep@Mixedbread-Grep                  # Better search
 }
 ```
 
-This is the key - I have 14 MCPs configured but only ~5-6 enabled per project. Keeps context window healthy.
+关键是 - 我配置了 14 个 MCP,但每个项目只启用约 5-6 个。保持上下文窗口健康。
 
-### Key Hooks
+### 关键 Hooks
 
 ```json
 {
@@ -358,60 +358,60 @@ This is the key - I have 14 MCPs configured but only ~5-6 enabled per project. K
 }
 ```
 
-### Custom Status Line
+### 自定义状态栏
 
-Shows user, directory, git branch with dirty indicator, context remaining %, model, time, and todo count:
+显示用户、目录、带有脏指示器的 git 分支、剩余上下文 %、模型、时间和待办事项计数：
 
 ![Custom status line](./assets/images/shortform/11-statusline.jpeg)
-*Example statusline in my Mac root directory*
+*我 Mac 根目录中的状态栏示例*
 
 ```
 affoon:~ ctx:65% Opus 4.5 19:52
 ▌▌ plan mode on (shift+tab to cycle)
 ```
 
-### Rules Structure
+### Rules 结构
 
 ```
 ~/.claude/rules/
-  security.md      # Mandatory security checks
-  coding-style.md  # Immutability, file size limits
-  testing.md       # TDD, 80% coverage
-  git-workflow.md  # Conventional commits
-  agents.md        # Subagent delegation rules
-  patterns.md      # API response formats
-  performance.md   # Model selection (Haiku vs Sonnet vs Opus)
-  hooks.md         # Hook documentation
+  security.md      # 强制安全检查
+  coding-style.md  # 不可变性,文件大小限制
+  testing.md       # TDD,80% 覆盖率
+  git-workflow.md  # 约定式提交
+  agents.md        # Subagent 委派规则
+  patterns.md      # API 响应格式
+  performance.md   # 模型选择（Haiku vs Sonnet vs Opus）
+  hooks.md         # Hook 文档
 ```
 
 ### Subagents
 
 ```
 ~/.claude/agents/
-  planner.md           # Break down features
-  architect.md         # System design
-  tdd-guide.md         # Write tests first
-  code-reviewer.md     # Quality review
-  security-reviewer.md # Vulnerability scan
+  planner.md           # 分解功能
+  architect.md         # 系统设计
+  tdd-guide.md         # 先写测试
+  code-reviewer.md     # 质量审查
+  security-reviewer.md # 漏洞扫描
   build-error-resolver.md
-  e2e-runner.md        # Playwright tests
-  refactor-cleaner.md  # Dead code removal
-  doc-updater.md       # Keep docs synced
+  e2e-runner.md        # Playwright 测试
+  refactor-cleaner.md  # 清理死代码
+  doc-updater.md       # 保持文档同步
 ```
 
 ---
 
-## Key Takeaways
+## 关键要点
 
-1. **Don't overcomplicate** - treat configuration like fine-tuning, not architecture
-2. **Context window is precious** - disable unused MCPs and plugins
-3. **Parallel execution** - fork conversations, use git worktrees
-4. **Automate the repetitive** - hooks for formatting, linting, reminders
-5. **Scope your subagents** - limited tools = focused execution
+1. **不要过度复杂化** - 将配置视为微调,而不是架构
+2. **上下文窗口很宝贵** - 禁用未使用的 MCP 和插件
+3. **并行执行** - fork 对话,使用 git worktrees
+4. **自动化重复的工作** - 用于格式化、linting、提醒的钩子
+5. **限定你的 subagents** - 有限的工具 = 专注的执行
 
 ---
 
-## References
+## 参考资料
 
 - [Plugins Reference](https://code.claude.com/docs/en/plugins-reference)
 - [Hooks Documentation](https://code.claude.com/docs/en/hooks)
@@ -423,8 +423,8 @@ affoon:~ ctx:65% Opus 4.5 19:52
 
 ---
 
-**Note:** This is a subset of detail. See the [Longform Guide](./the-longform-guide.md) for advanced patterns.
+**注意：** 这是详细信息的子集。查看[深度指南](./the-longform-guide.md)以了解高级模式。
 
 ---
 
-*Won the Anthropic x Forum Ventures hackathon in NYC building [zenith.chat](https://zenith.chat) with [@DRodriguezFX](https://x.com/DRodriguezFX)*
+*在纽约与 [@DRodriguezFX](https://x.com/DRodriguezFX) 一起构建 [zenith.chat](https://zenith.chat),赢得了 Anthropic x Forum Ventures 黑客马拉松*
