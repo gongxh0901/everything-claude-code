@@ -1,6 +1,6 @@
 /**
- * Cross-platform utility functions for Claude Code hooks and scripts
- * Works on Windows, macOS, and Linux
+ * Claude Code 钩子和脚本的跨平台工具函数
+ * 适用于 Windows、macOS 和 Linux
  */
 
 const fs = require('fs');
@@ -8,48 +8,48 @@ const path = require('path');
 const os = require('os');
 const { execSync, spawnSync } = require('child_process');
 
-// Platform detection
+// 平台检测
 const isWindows = process.platform === 'win32';
 const isMacOS = process.platform === 'darwin';
 const isLinux = process.platform === 'linux';
 
 /**
- * Get the user's home directory (cross-platform)
+ * 获取用户主目录（跨平台）
  */
 function getHomeDir() {
   return os.homedir();
 }
 
 /**
- * Get the Claude config directory
+ * 获取 Claude 配置目录
  */
 function getClaudeDir() {
   return path.join(getHomeDir(), '.claude');
 }
 
 /**
- * Get the sessions directory
+ * 获取会话目录
  */
 function getSessionsDir() {
   return path.join(getClaudeDir(), 'sessions');
 }
 
 /**
- * Get the learned skills directory
+ * 获取已学习技能目录
  */
 function getLearnedSkillsDir() {
   return path.join(getClaudeDir(), 'skills', 'learned');
 }
 
 /**
- * Get the temp directory (cross-platform)
+ * 获取临时目录（跨平台）
  */
 function getTempDir() {
   return os.tmpdir();
 }
 
 /**
- * Ensure a directory exists (create if not)
+ * 确保目录存在（如果不存在则创建）
  */
 function ensureDir(dirPath) {
   if (!fs.existsSync(dirPath)) {
@@ -59,7 +59,7 @@ function ensureDir(dirPath) {
 }
 
 /**
- * Get current date in YYYY-MM-DD format
+ * 获取当前日期，格式为 YYYY-MM-DD
  */
 function getDateString() {
   const now = new Date();
@@ -70,7 +70,7 @@ function getDateString() {
 }
 
 /**
- * Get current time in HH:MM format
+ * 获取当前时间，格式为 HH:MM
  */
 function getTimeString() {
   const now = new Date();
@@ -80,7 +80,7 @@ function getTimeString() {
 }
 
 /**
- * Get the git repository name
+ * 获取 git 仓库名称
  */
 function getGitRepoName() {
   const result = runCommand('git rev-parse --show-toplevel');
@@ -89,7 +89,7 @@ function getGitRepoName() {
 }
 
 /**
- * Get project name from git repo or current directory
+ * 从 git 仓库或当前目录获取项目名称
  */
 function getProjectName() {
   const repoName = getGitRepoName();
@@ -98,8 +98,8 @@ function getProjectName() {
 }
 
 /**
- * Get short session ID from CLAUDE_SESSION_ID environment variable
- * Returns last 8 characters, falls back to project name then 'default'
+ * 从 CLAUDE_SESSION_ID 环境变量获取简短的会话 ID
+ * 返回最后 8 个字符，回退到项目名称或 'default'
  */
 function getSessionIdShort(fallback = 'default') {
   const sessionId = process.env.CLAUDE_SESSION_ID;
@@ -110,7 +110,7 @@ function getSessionIdShort(fallback = 'default') {
 }
 
 /**
- * Get current datetime in YYYY-MM-DD HH:MM:SS format
+ * 获取当前日期时间，格式为 YYYY-MM-DD HH:MM:SS
  */
 function getDateTimeString() {
   const now = new Date();
@@ -124,10 +124,10 @@ function getDateTimeString() {
 }
 
 /**
- * Find files matching a pattern in a directory (cross-platform alternative to find)
- * @param {string} dir - Directory to search
- * @param {string} pattern - File pattern (e.g., "*.tmp", "*.md")
- * @param {object} options - Options { maxAge: days, recursive: boolean }
+ * 在目录中查找匹配模式的文件（find 的跨平台替代方案）
+ * @param {string} dir - 要搜索的目录
+ * @param {string} pattern - 文件模式（例如 "*.tmp"、"*.md"）
+ * @param {object} options - 选项 { maxAge: 天数, recursive: 布尔值 }
  */
 function findFiles(dir, pattern, options = {}) {
   const { maxAge = null, recursive = false } = options;
@@ -166,23 +166,23 @@ function findFiles(dir, pattern, options = {}) {
         }
       }
     } catch (err) {
-      // Log permission errors for debugging
+      // 记录权限错误用于调试
       if (err.code === 'EACCES' || err.code === 'EPERM') {
-        // Silently skip permission denied errors
+        // 静默跳过权限被拒绝的错误
       }
     }
   }
 
   searchDir(dir);
 
-  // Sort by modification time (newest first)
+  // 按修改时间排序（最新的在前）
   results.sort((a, b) => b.mtime - a.mtime);
 
   return results;
 }
 
 /**
- * Read JSON from stdin (for hook input)
+ * 从标准输入读取 JSON（用于钩子输入）
  */
 async function readStdinJson() {
   return new Promise((resolve, reject) => {
@@ -210,14 +210,14 @@ async function readStdinJson() {
 }
 
 /**
- * Log to stderr (visible to user in Claude Code)
+ * 输出到标准错误（在 Claude Code 中对用户可见）
  */
 function log(message) {
   console.error(message);
 }
 
 /**
- * Output to stdout (returned to Claude)
+ * 输出到标准输出（返回给 Claude）
  */
 function output(data) {
   if (typeof data === 'object') {
@@ -228,7 +228,7 @@ function output(data) {
 }
 
 /**
- * Read a text file safely
+ * 安全地读取文本文件
  */
 function readFile(filePath) {
   try {
@@ -239,7 +239,7 @@ function readFile(filePath) {
 }
 
 /**
- * Write a text file
+ * 写入文本文件
  */
 function writeFile(filePath, content) {
   ensureDir(path.dirname(filePath));
@@ -247,7 +247,7 @@ function writeFile(filePath, content) {
 }
 
 /**
- * Append to a text file
+ * 追加内容到文本文件
  */
 function appendFile(filePath, content) {
   ensureDir(path.dirname(filePath));
@@ -255,18 +255,18 @@ function appendFile(filePath, content) {
 }
 
 /**
- * Check if a command exists in PATH
- * Uses execFileSync to prevent command injection
+ * 检查命令是否存在于 PATH 中
+ * 使用 execFileSync 防止命令注入
  */
 function commandExists(cmd) {
-  // Validate command name - only allow alphanumeric, dash, underscore, dot
+  // 验证命令名称 - 只允许字母数字、短横线、下划线、点
   if (!/^[a-zA-Z0-9_.-]+$/.test(cmd)) {
     return false;
   }
 
   try {
     if (isWindows) {
-      // Use spawnSync to avoid shell interpolation
+      // 使用 spawnSync 避免 shell 插值
       const result = spawnSync('where', [cmd], { stdio: 'pipe' });
       return result.status === 0;
     } else {
@@ -279,14 +279,14 @@ function commandExists(cmd) {
 }
 
 /**
- * Run a command and return output
+ * 运行命令并返回输出
  *
- * SECURITY NOTE: This function executes shell commands. Only use with
- * trusted, hardcoded commands. Never pass user-controlled input directly.
- * For user input, use spawnSync with argument arrays instead.
+ * 安全注意事项：此函数执行 shell 命令。只能与
+ * 受信任的硬编码命令一起使用。切勿直接传递用户控制的输入。
+ * 对于用户输入，应使用带参数数组的 spawnSync。
  *
- * @param {string} cmd - Command to execute (should be trusted/hardcoded)
- * @param {object} options - execSync options
+ * @param {string} cmd - 要执行的命令（应该是受信任/硬编码的）
+ * @param {object} options - execSync 选项
  */
 function runCommand(cmd, options = {}) {
   try {
@@ -302,14 +302,14 @@ function runCommand(cmd, options = {}) {
 }
 
 /**
- * Check if current directory is a git repository
+ * 检查当前目录是否是 git 仓库
  */
 function isGitRepo() {
   return runCommand('git rev-parse --git-dir').success;
 }
 
 /**
- * Get git modified files
+ * 获取 git 修改的文件
  */
 function getGitModifiedFiles(patterns = []) {
   if (!isGitRepo()) return [];
@@ -332,7 +332,7 @@ function getGitModifiedFiles(patterns = []) {
 }
 
 /**
- * Replace text in a file (cross-platform sed alternative)
+ * 替换文件中的文本（跨平台的 sed 替代方案）
  */
 function replaceInFile(filePath, search, replace) {
   const content = readFile(filePath);
@@ -344,7 +344,7 @@ function replaceInFile(filePath, search, replace) {
 }
 
 /**
- * Count occurrences of a pattern in a file
+ * 统计文件中模式出现的次数
  */
 function countInFile(filePath, pattern) {
   const content = readFile(filePath);
@@ -356,7 +356,7 @@ function countInFile(filePath, pattern) {
 }
 
 /**
- * Search for pattern in file and return matching lines with line numbers
+ * 在文件中搜索模式并返回带行号的匹配行
  */
 function grepFile(filePath, pattern) {
   const content = readFile(filePath);
@@ -376,12 +376,12 @@ function grepFile(filePath, pattern) {
 }
 
 module.exports = {
-  // Platform info
+  // 平台信息
   isWindows,
   isMacOS,
   isLinux,
 
-  // Directories
+  // 目录
   getHomeDir,
   getClaudeDir,
   getSessionsDir,
@@ -389,17 +389,17 @@ module.exports = {
   getTempDir,
   ensureDir,
 
-  // Date/Time
+  // 日期/时间
   getDateString,
   getTimeString,
   getDateTimeString,
 
-  // Session/Project
+  // 会话/项目
   getSessionIdShort,
   getGitRepoName,
   getProjectName,
 
-  // File operations
+  // 文件操作
   findFiles,
   readFile,
   writeFile,
@@ -408,12 +408,12 @@ module.exports = {
   countInFile,
   grepFile,
 
-  // Hook I/O
+  // 钩子输入/输出
   readStdinJson,
   log,
   output,
 
-  // System
+  // 系统
   commandExists,
   runCommand,
   isGitRepo,

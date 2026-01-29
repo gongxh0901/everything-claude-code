@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * Stop Hook (Session End) - Persist learnings when session ends
+ * Stop 钩子（会话结束）- 在会话结束时持久化学习内容
  *
- * Cross-platform (Windows, macOS, Linux)
+ * 跨平台支持 (Windows, macOS, Linux)
  *
- * Runs when Claude session ends. Creates/updates session log file
- * with timestamp for continuity tracking.
+ * 在 Claude 会话结束时运行。创建/更新会话日志文件，
+ * 带有时间戳以进行连续性跟踪。
  */
 
 const path = require('path');
@@ -25,14 +25,14 @@ async function main() {
   const sessionsDir = getSessionsDir();
   const today = getDateString();
   const shortId = getSessionIdShort();
-  // Include session ID in filename for unique per-session tracking
+  // 在文件名中包含会话 ID 以实现每个会话的唯一跟踪
   const sessionFile = path.join(sessionsDir, `${today}-${shortId}-session.tmp`);
 
   ensureDir(sessionsDir);
 
   const currentTime = getTimeString();
 
-  // If session file exists for today, update the end time
+  // 如果今天存在会话文件，更新结束时间
   if (fs.existsSync(sessionFile)) {
     const success = replaceInFile(
       sessionFile,
@@ -41,44 +41,44 @@ async function main() {
     );
 
     if (success) {
-      log(`[SessionEnd] Updated session file: ${sessionFile}`);
+      log(`[会话结束] 已更新会话文件: ${sessionFile}`);
     }
   } else {
-    // Create new session file with template
-    const template = `# Session: ${today}
-**Date:** ${today}
-**Started:** ${currentTime}
-**Last Updated:** ${currentTime}
+    // 使用模板创建新的会话文件
+    const template = `# 会话: ${today}
+**日期:** ${today}
+**开始时间:** ${currentTime}
+**最后更新:** ${currentTime}
 
 ---
 
-## Current State
+## 当前状态
 
-[Session context goes here]
+[会话上下文放在这里]
 
-### Completed
+### 已完成
 - [ ]
 
-### In Progress
+### 进行中
 - [ ]
 
-### Notes for Next Session
+### 下次会话备注
 -
 
-### Context to Load
+### 需要加载的上下文
 \`\`\`
-[relevant files]
+[相关文件]
 \`\`\`
 `;
 
     writeFile(sessionFile, template);
-    log(`[SessionEnd] Created session file: ${sessionFile}`);
+    log(`[会话结束] 已创建会话文件: ${sessionFile}`);
   }
 
   process.exit(0);
 }
 
 main().catch(err => {
-  console.error('[SessionEnd] Error:', err.message);
+  console.error('[会话结束] 错误:', err.message);
   process.exit(0);
 });

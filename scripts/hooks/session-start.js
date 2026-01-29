@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * SessionStart Hook - Load previous context on new session
+ * SessionStart 钩子 - 在新会话开始时加载之前的上下文
  *
- * Cross-platform (Windows, macOS, Linux)
+ * 跨平台支持 (Windows, macOS, Linux)
  *
- * Runs when a new Claude session starts. Checks for recent session
- * files and notifies Claude of available context to load.
+ * 在新的 Claude 会话开始时运行。检查最近的会话文件
+ * 并通知 Claude 有可用的上下文可以加载。
  */
 
 const {
@@ -21,34 +21,34 @@ async function main() {
   const sessionsDir = getSessionsDir();
   const learnedDir = getLearnedSkillsDir();
 
-  // Ensure directories exist
+  // 确保目录存在
   ensureDir(sessionsDir);
   ensureDir(learnedDir);
 
-  // Check for recent session files (last 7 days)
-  // Match both old format (YYYY-MM-DD-session.tmp) and new format (YYYY-MM-DD-shortid-session.tmp)
+  // 检查最近的会话文件（最近 7 天）
+  // 匹配旧格式 (YYYY-MM-DD-session.tmp) 和新格式 (YYYY-MM-DD-shortid-session.tmp)
   const recentSessions = findFiles(sessionsDir, '*-session.tmp', { maxAge: 7 });
 
   if (recentSessions.length > 0) {
     const latest = recentSessions[0];
-    log(`[SessionStart] Found ${recentSessions.length} recent session(s)`);
-    log(`[SessionStart] Latest: ${latest.path}`);
+    log(`[会话开始] 找到 ${recentSessions.length} 个最近的会话`);
+    log(`[会话开始] 最新: ${latest.path}`);
   }
 
-  // Check for learned skills
+  // 检查已学习的技能
   const learnedSkills = findFiles(learnedDir, '*.md');
 
   if (learnedSkills.length > 0) {
-    log(`[SessionStart] ${learnedSkills.length} learned skill(s) available in ${learnedDir}`);
+    log(`[会话开始] ${learnedDir} 中有 ${learnedSkills.length} 个已学习的技能可用`);
   }
 
-  // Detect and report package manager
+  // 检测并报告包管理器
   const pm = getPackageManager();
-  log(`[SessionStart] Package manager: ${pm.name} (${pm.source})`);
+  log(`[会话开始] 包管理器: ${pm.name} (${pm.source})`);
 
-  // If package manager was detected via fallback, show selection prompt
+  // 如果包管理器是通过回退检测到的，显示选择提示
   if (pm.source === 'fallback' || pm.source === 'default') {
-    log('[SessionStart] No package manager preference found.');
+    log('[会话开始] 未找到包管理器偏好设置。');
     log(getSelectionPrompt());
   }
 
@@ -56,6 +56,6 @@ async function main() {
 }
 
 main().catch(err => {
-  console.error('[SessionStart] Error:', err.message);
-  process.exit(0); // Don't block on errors
+  console.error('[会话开始] 错误:', err.message);
+  process.exit(0); // 出错时不阻塞
 });

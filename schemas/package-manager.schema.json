@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Package Manager Configuration",
+  "title": "包管理器配置",
   "type": "object",
   "properties": {
     "packageManager": {

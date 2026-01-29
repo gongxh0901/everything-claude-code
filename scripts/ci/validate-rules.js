@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validate rule markdown files
+ * 验证规则 markdown 文件
  */
 
 const fs = require('fs');
@@ -10,7 +10,7 @@ const RULES_DIR = path.join(__dirname, '../../rules');
 
 function validateRules() {
   if (!fs.existsSync(RULES_DIR)) {
-    console.log('No rules directory found, skipping validation');
+    console.log('未找到 rules 目录，跳过验证');
     process.exit(0);
   }
 
@@ -27,13 +27,13 @@ function validateRules() {
 
       const content = fs.readFileSync(filePath, 'utf-8');
       if (content.trim().length === 0) {
-        console.error(`ERROR: ${file} - Empty rule file`);
+        console.error(`错误: ${file} - 规则文件为空`);
         hasErrors = true;
         continue;
       }
       validatedCount++;
     } catch (err) {
-      console.error(`ERROR: ${file} - ${err.message}`);
+      console.error(`错误: ${file} - ${err.message}`);
       hasErrors = true;
     }
   }
@@ -42,7 +42,7 @@ function validateRules() {
     process.exit(1);
   }
 
-  console.log(`Validated ${validatedCount} rule files`);
+  console.log(`已验证 ${validatedCount} 个规则文件`);
 }
 
 validateRules();

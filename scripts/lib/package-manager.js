@@ -1,15 +1,15 @@
 /**
- * Package Manager Detection and Selection
- * Automatically detects the preferred package manager or lets user choose
+ * 包管理器检测和选择
+ * 自动检测首选的包管理器或让用户选择
  *
- * Supports: npm, pnpm, yarn, bun
+ * 支持：npm、pnpm、yarn、bun
  */
 
 const fs = require('fs');
 const path = require('path');
 const { commandExists, getClaudeDir, readFile, writeFile } = require('./utils');
 
-// Package manager definitions
+// 包管理器定义
 const PACKAGE_MANAGERS = {
   npm: {
     name: 'npm',
@@ -53,16 +53,16 @@ const PACKAGE_MANAGERS = {
   }
 };
 
-// Priority order for detection
+// 检测优先级顺序
 const DETECTION_PRIORITY = ['pnpm', 'bun', 'yarn', 'npm'];
 
-// Config file path
+// 配置文件路径
 function getConfigPath() {
   return path.join(getClaudeDir(), 'package-manager.json');
 }
 
 /**
- * Load saved package manager configuration
+ * 加载保存的包管理器配置
  */
 function loadConfig() {
   const configPath = getConfigPath();
@@ -79,7 +79,7 @@ function loadConfig() {
 }
 
 /**
- * Save package manager configuration
+ * 保存包管理器配置
  */
 function saveConfig(config) {
   const configPath = getConfigPath();
@@ -87,7 +87,7 @@ function saveConfig(config) {
 }
 
 /**
- * Detect package manager from lock file in project directory
+ * 从项目目录中的锁文件检测包管理器
  */
 function detectFromLockFile(projectDir = process.cwd()) {
   for (const pmName of DETECTION_PRIORITY) {
@@ -102,7 +102,7 @@ function detectFromLockFile(projectDir = process.cwd()) {
 }
 
 /**
- * Detect package manager from package.json packageManager field
+ * 从 package.json 的 packageManager 字段检测包管理器
  */
 function detectFromPackageJson(projectDir = process.cwd()) {
   const packageJsonPath = path.join(projectDir, 'package.json');
@@ -112,21 +112,21 @@ function detectFromPackageJson(projectDir = process.cwd()) {
     try {
       const pkg = JSON.parse(content);
       if (pkg.packageManager) {
-        // Format: "pnpm@8.6.0" or just "pnpm"
+        // 格式："pnpm@8.6.0" 或只是 "pnpm"
         const pmName = pkg.packageManager.split('@')[0];
         if (PACKAGE_MANAGERS[pmName]) {
           return pmName;
         }
       }
     } catch {
-      // Invalid package.json
+      // 无效的 package.json
     }
   }
   return null;
 }
 
 /**
- * Get available package managers (installed on system)
+ * 获取可用的包管理器（系统中已安装的）
  */
 function getAvailablePackageManagers() {
   const available = [];
@@ -141,15 +141,15 @@ function getAvailablePackageManagers() {
 }
 
 /**
- * Get the package manager to use for current project
+ * 获取当前项目使用的包管理器
  *
- * Detection priority:
- * 1. Environment variable CLAUDE_PACKAGE_MANAGER
- * 2. Project-specific config (in .claude/package-manager.json)
- * 3. package.json packageManager field
- * 4. Lock file detection
- * 5. Global user preference (in ~/.claude/package-manager.json)
- * 6. First available package manager (by priority)
+ * 检测优先级：
+ * 1. 环境变量 CLAUDE_PACKAGE_MANAGER
+ * 2. 项目特定配置（在 .claude/package-manager.json 中）
+ * 3. package.json 的 packageManager 字段
+ * 4. 锁文件检测
+ * 5. 全局用户偏好（在 ~/.claude/package-manager.json 中）
+ * 6. 第一个可用的包管理器（按优先级）
  *
  * @param {object} options - { projectDir, fallbackOrder }
  * @returns {object} - { name, config, source }
@@ -157,7 +157,7 @@ function getAvailablePackageManagers() {
 function getPackageManager(options = {}) {
   const { projectDir = process.cwd(), fallbackOrder = DETECTION_PRIORITY } = options;
 
-  // 1. Check environment variable
+  // 1. 检查环境变量
   const envPm = process.env.CLAUDE_PACKAGE_MANAGER;
   if (envPm && PACKAGE_MANAGERS[envPm]) {
     return {
@@ -167,7 +167,7 @@ function getPackageManager(options = {}) {
     };
   }
 
-  // 2. Check project-specific config
+  // 2. 检查项目特定配置
   const projectConfigPath = path.join(projectDir, '.claude', 'package-manager.json');
   const projectConfig = readFile(projectConfigPath);
   if (projectConfig) {
@@ -181,11 +181,11 @@ function getPackageManager(options = {}) {
         };
       }
     } catch {
-      // Invalid config
+      // 无效的配置
     }
   }
 
-  // 3. Check package.json packageManager field
+  // 3. 检查 package.json 的 packageManager 字段
   const fromPackageJson = detectFromPackageJson(projectDir);
   if (fromPackageJson) {
     return {
@@ -195,7 +195,7 @@ function getPackageManager(options = {}) {
     };
   }
 
-  // 4. Check lock file
+  // 4. 检查锁文件
   const fromLockFile = detectFromLockFile(projectDir);
   if (fromLockFile) {
     return {
@@ -205,7 +205,7 @@ function getPackageManager(options = {}) {
     };
   }
 
-  // 5. Check global user preference
+  // 5. 检查全局用户偏好
   const globalConfig = loadConfig();
   if (globalConfig && globalConfig.packageManager && PACKAGE_MANAGERS[globalConfig.packageManager]) {
     return {
@@ -215,7 +215,7 @@ function getPackageManager(options = {}) {
     };
   }
 
-  // 6. Use first available package manager
+  // 6. 使用第一个可用的包管理器
   const available = getAvailablePackageManagers();
   for (const pmName of fallbackOrder) {
     if (available.includes(pmName)) {
@@ -227,7 +227,7 @@ function getPackageManager(options = {}) {
     }
   }
 
-  // Default to npm (always available with Node.js)
+  // 默认使用 npm（Node.js 始终附带）
   return {
     name: 'npm',
     config: PACKAGE_MANAGERS.npm,
@@ -236,11 +236,11 @@ function getPackageManager(options = {}) {
 }
 
 /**
- * Set user's preferred package manager (global)
+ * 设置用户首选的包管理器（全局）
  */
 function setPreferredPackageManager(pmName) {
   if (!PACKAGE_MANAGERS[pmName]) {
-    throw new Error(`Unknown package manager: ${pmName}`);
+    throw new Error(`未知的包管理器: ${pmName}`);
   }
 
   const config = loadConfig() || {};
@@ -252,11 +252,11 @@ function setPreferredPackageManager(pmName) {
 }
 
 /**
- * Set project's preferred package manager
+ * 设置项目首选的包管理器
  */
 function setProjectPackageManager(pmName, projectDir = process.cwd()) {
   if (!PACKAGE_MANAGERS[pmName]) {
-    throw new Error(`Unknown package manager: ${pmName}`);
+    throw new Error(`未知的包管理器: ${pmName}`);
   }
 
   const configDir = path.join(projectDir, '.claude');
@@ -272,8 +272,8 @@ function setProjectPackageManager(pmName, projectDir = process.cwd()) {
 }
 
 /**
- * Get the command to run a script
- * @param {string} script - Script name (e.g., "dev", "build", "test")
+ * 获取运行脚本的命令
+ * @param {string} script - 脚本名称（例如 "dev"、"build"、"test"）
  * @param {object} options - { projectDir }
  */
 function getRunCommand(script, options = {}) {
@@ -294,9 +294,9 @@ function getRunCommand(script, options = {}) {
 }
 
 /**
- * Get the command to execute a package binary
- * @param {string} binary - Binary name (e.g., "prettier", "eslint")
- * @param {string} args - Arguments to pass
+ * 获取执行包二进制文件的命令
+ * @param {string} binary - 二进制文件名称（例如 "prettier"、"eslint"）
+ * @param {string} args - 要传递的参数
  */
 function getExecCommand(binary, args = '', options = {}) {
   const pm = getPackageManager(options);
@@ -304,31 +304,31 @@ function getExecCommand(binary, args = '', options = {}) {
 }
 
 /**
- * Interactive prompt for package manager selection
- * Returns a message for Claude to show to user
+ * 包管理器选择的交互式提示
+ * 返回要向用户显示的消息
  */
 function getSelectionPrompt() {
   const available = getAvailablePackageManagers();
   const current = getPackageManager();
 
-  let message = '[PackageManager] Available package managers:\n';
+  let message = '[包管理器] 可用的包管理器:\n';
 
   for (const pmName of available) {
-    const indicator = pmName === current.name ? ' (current)' : '';
+    const indicator = pmName === current.name ? ' (当前)' : '';
     message += `  - ${pmName}${indicator}\n`;
   }
 
-  message += '\nTo set your preferred package manager:\n';
-  message += '  - Global: Set CLAUDE_PACKAGE_MANAGER environment variable\n';
-  message += '  - Or add to ~/.claude/package-manager.json: {"packageManager": "pnpm"}\n';
-  message += '  - Or add to package.json: {"packageManager": "pnpm@8"}\n';
+  message += '\n设置首选包管理器的方法:\n';
+  message += '  - 全局: 设置 CLAUDE_PACKAGE_MANAGER 环境变量\n';
+  message += '  - 或添加到 ~/.claude/package-manager.json: {"packageManager": "pnpm"}\n';
+  message += '  - 或添加到 package.json: {"packageManager": "pnpm@8"}\n';
 
   return message;
 }
 
 /**
- * Generate a regex pattern that matches commands for all package managers
- * @param {string} action - Action pattern (e.g., "run dev", "install", "test")
+ * 生成匹配所有包管理器命令的正则表达式模式
+ * @param {string} action - 动作模式（例如 "run dev"、"install"、"test"）
  */
 function getCommandPattern(action) {
   const patterns = [];
@@ -362,7 +362,7 @@ function getCommandPattern(action) {
       'bun run build'
     );
   } else {
-    // Generic run command
+    // 通用运行命令
     patterns.push(
       `npm run ${action}`,
       `pnpm( run)? ${action}`,

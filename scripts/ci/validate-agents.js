@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validate agent markdown files have required frontmatter
+ * 验证 agent markdown 文件是否包含必需的 frontmatter
  */
 
 const fs = require('fs');
@@ -10,9 +10,9 @@ const AGENTS_DIR = path.join(__dirname, '../../agents');
 const REQUIRED_FIELDS = ['model', 'tools'];
 
 function extractFrontmatter(content) {
-  // Strip BOM if present (UTF-8 BOM: \uFEFF)
+  // 如果存在 BOM 则移除 (UTF-8 BOM: \uFEFF)
   const cleanContent = content.replace(/^\uFEFF/, '');
-  // Support both LF and CRLF line endings
+  // 支持 LF 和 CRLF 换行符
   const match = cleanContent.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!match) return null;
 
@@ -31,7 +31,7 @@ function extractFrontmatter(content) {
 
 function validateAgents() {
   if (!fs.existsSync(AGENTS_DIR)) {
-    console.log('No agents directory found, skipping validation');
+    console.log('未找到 agents 目录，跳过验证');
     process.exit(0);
   }
 
@@ -44,14 +44,14 @@ function validateAgents() {
     const frontmatter = extractFrontmatter(content);
 
     if (!frontmatter) {
-      console.error(`ERROR: ${file} - Missing frontmatter`);
+      console.error(`错误: ${file} - 缺少 frontmatter`);
       hasErrors = true;
       continue;
     }
 
     for (const field of REQUIRED_FIELDS) {
       if (!frontmatter[field]) {
-        console.error(`ERROR: ${file} - Missing required field: ${field}`);
+        console.error(`错误: ${file} - 缺少必需字段: ${field}`);
         hasErrors = true;
       }
     }
@@ -61,7 +61,7 @@ function validateAgents() {
     process.exit(1);
   }
 
-  console.log(`Validated ${files.length} agent files`);
+  console.log(`已验证 ${files.length} 个 agent 文件`);
 }
 
 validateAgents();

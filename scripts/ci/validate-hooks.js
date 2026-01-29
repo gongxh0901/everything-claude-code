@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validate hooks.json schema
+ * 验证 hooks.json 的结构
  */
 
 const fs = require('fs');
@@ -11,7 +11,7 @@ const VALID_EVENTS = ['PreToolUse', 'PostToolUse', 'PreCompact', 'SessionStart',
 
 function validateHooks() {
   if (!fs.existsSync(HOOKS_FILE)) {
-    console.log('No hooks.json found, skipping validation');
+    console.log('未找到 hooks.json，跳过验证');
     process.exit(0);
   }
 
@@ -19,26 +19,26 @@ function validateHooks() {
   try {
     data = JSON.parse(fs.readFileSync(HOOKS_FILE, 'utf-8'));
   } catch (e) {
-    console.error(`ERROR: Invalid JSON in hooks.json: ${e.message}`);
+    console.error(`错误: hooks.json 中的 JSON 无效: ${e.message}`);
     process.exit(1);
   }
 
-  // Support both object format { hooks: {...} } and array format
+  // 支持对象格式 { hooks: {...} } 和数组格式
   const hooks = data.hooks || data;
   let hasErrors = false;
   let totalMatchers = 0;
 
   if (typeof hooks === 'object' && !Array.isArray(hooks)) {
-    // Object format: { EventType: [matchers] }
+    // 对象格式: { EventType: [matchers] }
     for (const [eventType, matchers] of Object.entries(hooks)) {
       if (!VALID_EVENTS.includes(eventType)) {
-        console.error(`ERROR: Invalid event type: ${eventType}`);
+        console.error(`错误: 无效的事件类型: ${eventType}`);
         hasErrors = true;
         continue;
       }
 
       if (!Array.isArray(matchers)) {
-        console.error(`ERROR: ${eventType} must be an array`);
+        console.error(`错误: ${eventType} 必须是数组`);
         hasErrors = true;
         continue;
       }
@@ -46,27 +46,27 @@ function validateHooks() {
       for (let i = 0; i < matchers.length; i++) {
         const matcher = matchers[i];
         if (typeof matcher !== 'object' || matcher === null) {
-          console.error(`ERROR: ${eventType}[${i}] is not an object`);
+          console.error(`错误: ${eventType}[${i}] 不是对象`);
           hasErrors = true;
           continue;
         }
         if (!matcher.matcher) {
-          console.error(`ERROR: ${eventType}[${i}] missing 'matcher' field`);
+          console.error(`错误: ${eventType}[${i}] 缺少 'matcher' 字段`);
           hasErrors = true;
         }
         if (!matcher.hooks || !Array.isArray(matcher.hooks)) {
-          console.error(`ERROR: ${eventType}[${i}] missing 'hooks' array`);
+          console.error(`错误: ${eventType}[${i}] 缺少 'hooks' 数组`);
           hasErrors = true;
         } else {
-          // Validate each hook entry
+          // 验证每个钩子条目
           for (let j = 0; j < matcher.hooks.length; j++) {
             const hook = matcher.hooks[j];
             if (!hook.type || typeof hook.type !== 'string') {
-              console.error(`ERROR: ${eventType}[${i}].hooks[${j}] missing or invalid 'type' field`);
+              console.error(`错误: ${eventType}[${i}].hooks[${j}] 缺少或无效的 'type' 字段`);
               hasErrors = true;
             }
             if (!hook.command || (typeof hook.command !== 'string' && !Array.isArray(hook.command))) {
-              console.error(`ERROR: ${eventType}[${i}].hooks[${j}] missing or invalid 'command' field`);
+              console.error(`错误: ${eventType}[${i}].hooks[${j}] 缺少或无效的 'command' 字段`);
               hasErrors = true;
             }
           }
@@ -75,26 +75,26 @@ function validateHooks() {
       }
     }
   } else if (Array.isArray(hooks)) {
-    // Array format (legacy)
+    // 数组格式（旧版）
     for (let i = 0; i < hooks.length; i++) {
       const hook = hooks[i];
       if (!hook.matcher) {
-        console.error(`ERROR: Hook ${i} missing 'matcher' field`);
+        console.error(`错误: 钩子 ${i} 缺少 'matcher' 字段`);
         hasErrors = true;
       }
       if (!hook.hooks || !Array.isArray(hook.hooks)) {
-        console.error(`ERROR: Hook ${i} missing 'hooks' array`);
+        console.error(`错误: 钩子 ${i} 缺少 'hooks' 数组`);
         hasErrors = true;
       } else {
-        // Validate each hook entry
+        // 验证每个钩子条目
         for (let j = 0; j < hook.hooks.length; j++) {
           const h = hook.hooks[j];
           if (!h.type || typeof h.type !== 'string') {
-            console.error(`ERROR: Hook ${i}.hooks[${j}] missing or invalid 'type' field`);
+            console.error(`错误: 钩子 ${i}.hooks[${j}] 缺少或无效的 'type' 字段`);
             hasErrors = true;
           }
           if (!h.command || (typeof h.command !== 'string' && !Array.isArray(h.command))) {
-            console.error(`ERROR: Hook ${i}.hooks[${j}] missing or invalid 'command' field`);
+            console.error(`错误: 钩子 ${i}.hooks[${j}] 缺少或无效的 'command' 字段`);
             hasErrors = true;
           }
         }
@@ -102,7 +102,7 @@ function validateHooks() {
       totalMatchers++;
     }
   } else {
-    console.error('ERROR: hooks.json must be an object or array');
+    console.error('错误: hooks.json 必须是对象或数组');
     process.exit(1);
   }
 
@@ -110,7 +110,7 @@ function validateHooks() {
     process.exit(1);
   }
 
-  console.log(`Validated ${totalMatchers} hook matchers`);
+  console.log(`已验证 ${totalMatchers} 个钩子匹配器`);
 }
 
 validateHooks();

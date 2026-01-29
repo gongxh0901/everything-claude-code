@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Validate skill directories have SKILL.md with required structure
+ * 验证技能目录是否包含必需结构的 SKILL.md
  */
 
 const fs = require('fs');
@@ -10,7 +10,7 @@ const SKILLS_DIR = path.join(__dirname, '../../skills');
 
 function validateSkills() {
   if (!fs.existsSync(SKILLS_DIR)) {
-    console.log('No skills directory found, skipping validation');
+    console.log('未找到 skills 目录，跳过验证');
     process.exit(0);
   }
 
@@ -22,14 +22,14 @@ function validateSkills() {
   for (const dir of dirs) {
     const skillMd = path.join(SKILLS_DIR, dir, 'SKILL.md');
     if (!fs.existsSync(skillMd)) {
-      console.error(`ERROR: ${dir}/ - Missing SKILL.md`);
+      console.error(`错误: ${dir}/ - 缺少 SKILL.md`);
       hasErrors = true;
       continue;
     }
 
     const content = fs.readFileSync(skillMd, 'utf-8');
     if (content.trim().length === 0) {
-      console.error(`ERROR: ${dir}/SKILL.md - Empty file`);
+      console.error(`错误: ${dir}/SKILL.md - 文件为空`);
       hasErrors = true;
       continue;
     }
@@ -41,7 +41,7 @@ function validateSkills() {
     process.exit(1);
   }
 
-  console.log(`Validated ${validCount} skill directories`);
+  console.log(`已验证 ${validCount} 个技能目录`);
 }
 
 validateSkills();
