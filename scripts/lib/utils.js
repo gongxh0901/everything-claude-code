@@ -166,7 +166,10 @@ function findFiles(dir, pattern, options = {}) {
         }
       }
     } catch (err) {
-      // Ignore permission errors
+      // Log permission errors for debugging
+      if (err.code === 'EACCES' || err.code === 'EPERM') {
+        // Silently skip permission denied errors
+      }
     }
   }
 

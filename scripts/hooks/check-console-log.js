@@ -54,6 +54,7 @@ process.stdin.on('end', () => {
     }
   } catch (error) {
     // Silently ignore errors (git might not be available, etc.)
+    console.error('[Hook] Error checking console.log:', error.message);
   }
 
   // Always output the original data

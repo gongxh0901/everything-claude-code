@@ -8,7 +8,7 @@ const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const { execSync, spawn } = require('child_process');
+const { spawn } = require('child_process');
 
 // Test helper
 function test(name, fn) {
@@ -296,7 +296,7 @@ async function runTests() {
       }
     };
 
-    for (const [eventType, hookArray] of Object.entries(hooks.hooks)) {
+    for (const [_eventType, hookArray] of Object.entries(hooks.hooks)) {
       checkHooks(hookArray);
     }
   })) passed++; else failed++;
@@ -320,7 +320,7 @@ async function runTests() {
       }
     };
 
-    for (const [eventType, hookArray] of Object.entries(hooks.hooks)) {
+    for (const [_eventType, hookArray] of Object.entries(hooks.hooks)) {
       checkHooks(hookArray);
     }
   })) passed++; else failed++;
