@@ -335,7 +335,7 @@ function runTests() {
 
   if (test('returns informative prompt', () => {
     const prompt = pm.getSelectionPrompt();
-    assert.ok(prompt.includes('Available package managers'), 'Should list available managers');
+    assert.ok(prompt.includes('可用的包管理器'), 'Should list available managers');
     assert.ok(prompt.includes('CLAUDE_PACKAGE_MANAGER'), 'Should mention env var');
   })) passed++; else failed++;
 
