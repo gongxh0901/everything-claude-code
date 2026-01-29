@@ -1,37 +1,37 @@
-# Plugin Manifest Schema Notes
+# 插件清单架构注释
 
-This document captures **undocumented but enforced constraints** of the Claude Code plugin manifest validator.
+本文档记录了 Claude Code 插件清单验证器的**未记录但强制执行的约束**。
 
-These rules are based on real installation failures, validator behavior, and comparison with known working plugins.
-They exist to prevent silent breakage and repeated regressions.
+这些规则基于实际的安装失败、验证器行为和与已知可用插件的比较。
+它们的存在是为了防止无声的故障和重复的回归。
 
-If you edit `.claude-plugin/plugin.json`, read this first.
+如果你编辑 `.claude-plugin/plugin.json`，请先阅读本文档。
 
 ---
 
-## Summary (Read This First)
+## 摘要（首先阅读此部分）
 
-The Claude plugin manifest validator is **strict and opinionated**.
-It enforces rules that are not fully documented in public schema references.
+Claude 插件清单验证器是**严格且固执己见的**。
+它强制执行的规则在公开架构参考中没有完全记录。
 
-The most common failure mode is:
+最常见的失败模式是：
 
-> The manifest looks reasonable, but the validator rejects it with vague errors like
+> 清单看起来很合理，但验证器以模糊的错误拒绝它，例如
 > `agents: Invalid input`
 
-This document explains why.
+本文档解释了原因。
 
 ---
 
-## Required Fields
+## 必需字段
 
-### `version` (MANDATORY)
+### `version`（强制）
 
-The `version` field is required by the validator even if omitted from some examples.
+验证器要求 `version` 字段，即使在某些示例中省略。
 
-If missing, installation may fail during marketplace install or CLI validation.
+如果缺少，安装可能在市场安装或 CLI 验证期间失败。
 
-Example:
+示例：
 
 ```json
 {
@@ -41,18 +41,18 @@ Example:
 
 ---
 
-## Field Shape Rules
+## 字段形状规则
 
-The following fields **must always be arrays**:
+以下字段**必须始终是数组**：
 
 * `agents`
 * `commands`
 * `skills`
-* `hooks` (if present)
+* `hooks`（如果存在）
 
-Even if there is only one entry, **strings are not accepted**.
+即使只有一个条目，**也不接受字符串**。
 
-### Invalid
+### 无效
 
 ```json
 {
@@ -60,7 +60,7 @@ Even if there is only one entry, **strings are not accepted**.
 }
 ```
 
-### Valid
+### 有效
 
 ```json
 {
@@ -68,17 +68,17 @@ Even if there is only one entry, **strings are not accepted**.
 }
 ```
 
-This applies consistently across all component path fields.
+这在所有组件路径字段中一致适用。
 
 ---
 
-## Path Resolution Rules (Critical)
+## 路径解析规则（关键）
 
-### Agents MUST use explicit file paths
+### 代理必须使用显式文件路径
 
-The validator **does not accept directory paths for `agents`**.
+验证器**不接受 `agents` 的目录路径**。
 
-Even the following will fail:
+即使以下情况也会失败：
 
 ```json
 {
@@ -86,7 +86,7 @@ Even the following will fail:
 }
 ```
 
-Instead, you must enumerate agent files explicitly:
+相反，你必须显式枚举代理文件：
 
 ```json
 {
@@ -98,23 +98,23 @@ Instead, you must enumerate agent files explicitly:
 }
 ```
 
-This is the most common source of validation errors.
+这是验证错误最常见的来源。
 
-### Commands and Skills
+### 命令和技能
 
-* `commands` and `skills` accept directory paths **only when wrapped in arrays**
-* Explicit file paths are safest and most future-proof
+* `commands` 和 `skills` 接受目录路径**只有在包装在数组中时**
+* 显式文件路径最安全，也最面向未来
 
 ---
 
-## Validator Behavior Notes
+## 验证器行为注释
 
-* `claude plugin validate` is stricter than some marketplace previews
-* Validation may pass locally but fail during install if paths are ambiguous
-* Errors are often generic (`Invalid input`) and do not indicate root cause
-* Cross-platform installs (especially Windows) are less forgiving of path assumptions
+* `claude plugin validate` 比某些市场预览更严格
+* 验证可能在本地通过但在安装期间失败（如果路径不明确）
+* 错误通常是通用的（`Invalid input`），不表示根本原因
+* 跨平台安装（尤其是 Windows）对路径假设的容忍度较低
 
-Assume the validator is hostile and literal.
+假设验证器是敌对的且按字面意思理解。
 
 ---
 
@@ -153,24 +153,22 @@ The test `plugin.json does NOT have explicit hooks declaration` in `tests/hooks/
 
 **If you're adding additional hook files** (not `hooks/hooks.json`), those CAN be declared. But the standard `hooks/hooks.json` must NOT be declared.
 
----
+## 已知反模式
 
-## Known Anti-Patterns
+这些看起来正确但被拒绝：
 
-These look correct but are rejected:
-
-* String values instead of arrays
-* Arrays of directories for `agents`
-* Missing `version`
-* Relying on inferred paths
-* Assuming marketplace behavior matches local validation
+* 字符串值而不是数组
+* `agents` 的目录数组
+* 缺少 `version`
+* 依赖推断的路径
+* 假设市场行为与本地验证匹配
 * **Adding `"hooks": "./hooks/hooks.json"`** - auto-loaded by convention, causes duplicate error
 
-Avoid cleverness. Be explicit.
+避免巧妙的做法。要明确。
 
 ---
 
-## Minimal Known-Good Example
+## 最小已知良好示例
 
 ```json
 {
@@ -184,37 +182,37 @@ Avoid cleverness. Be explicit.
 }
 ```
 
-This structure has been validated against the Claude plugin validator.
+此结构已根据 Claude 插件验证器进行验证。
 
 **Important:** Notice there is NO `"hooks"` field. The `hooks/hooks.json` file is loaded automatically by convention. Adding it explicitly causes a duplicate error.
 
 ---
 
-## Recommendation for Contributors
+## 对贡献者的建议
 
-Before submitting changes that touch `plugin.json`:
+在提交涉及 `plugin.json` 的更改之前：
 
-1. Use explicit file paths for agents
-2. Ensure all component fields are arrays
-3. Include a `version`
-4. Run:
+1. 为代理使用显式文件路径
+2. 确保所有组件字段都是数组
+3. 包含 `version`
+4. 运行：
 
 ```bash
 claude plugin validate .claude-plugin/plugin.json
 ```
 
-If in doubt, choose verbosity over convenience.
+如有疑问，选择详细而不是便利。
 
 ---
 
-## Why This File Exists
+## 为什么存在此文件
 
-This repository is widely forked and used as a reference implementation.
+该存储库被广泛分叉和用作参考实现。
 
-Documenting validator quirks here:
+在此记录验证器的怪癖：
 
-* Prevents repeated issues
-* Reduces contributor frustration
-* Preserves plugin stability as the ecosystem evolves
+* 防止重复问题
+* 减少贡献者的挫折感
+* 随着生态系统的发展保持插件稳定性
 
-If the validator changes, update this document first.
+如果验证器更改，请首先更新本文档。
