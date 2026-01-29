@@ -1,17 +1,17 @@
-## Description
-<!-- Brief description of changes -->
+## 描述
+<!-- 简要描述更改内容 -->
 
-## Type of Change
-- [ ] `fix:` Bug fix
-- [ ] `feat:` New feature
-- [ ] `refactor:` Code refactoring
-- [ ] `docs:` Documentation
-- [ ] `test:` Tests
-- [ ] `chore:` Maintenance/tooling
-- [ ] `ci:` CI/CD changes
+## 更改类型
+- [ ] `fix:` Bug 修复
+- [ ] `feat:` 新功能
+- [ ] `refactor:` 代码重构
+- [ ] `docs:` 文档更新
+- [ ] `test:` 测试相关
+- [ ] `chore:` 维护/工具
+- [ ] `ci:` CI/CD 变更
 
-## Checklist
-- [ ] Tests pass locally (`node tests/run-all.js`)
-- [ ] Validation scripts pass
-- [ ] Follows conventional commits format
-- [ ] Updated relevant documentation
+## 检查清单
+- [ ] 本地测试通过 (`node tests/run-all.js`)
+- [ ] 验证脚本通过
+- [ ] 遵循约定式提交格式
+- [ ] 已更新相关文档
