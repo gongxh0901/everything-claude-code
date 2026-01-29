@@ -7,7 +7,6 @@
 ![Markdown](https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white)
 
 <p align="left">
-  <a href="README.md">English</a> |
   <span>简体中文</span>
 </p>
 
