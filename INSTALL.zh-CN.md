@@ -8,7 +8,7 @@
 
 ```bash
 # 添加插件市场（使用 everything-zh 分支）
-/plugin marketplace add gongxh0901/everything-claude-code#everything-zh
+/plugin marketplace add gongxh0901/everything-claude-code-zh#everything-zh
 
 # 安装插件
 /plugin install everything-claude-code-zh@everything-claude-code-zh
@@ -24,7 +24,7 @@
     "everything-claude-code-zh": {
       "source": {
         "source": "github",
-        "repo": "gongxh0901/everything-claude-code",
+        "repo": "gongxh0901/everything-claude-code-zh",
         "ref": "everything-zh"
       }
     }
@@ -43,8 +43,8 @@
 
 ```bash
 # 1. 克隆仓库（everything-zh 分支）
-git clone -b everything-zh https://github.com/gongxh0901/everything-claude-code.git
-cd everything-claude-code
+git clone -b everything-zh https://github.com/gongxh0901/everything-claude-code-zh.git
+cd everything-claude-code-zh
 
 # 2. 复制代理（Agents）
 cp agents/*.md ~/.claude/agents/
@@ -71,10 +71,10 @@ cp -r skills/* ~/.claude/skills/
 
 ```bash
 # 克隆仓库
-git clone -b everything-zh https://github.com/gongxh0901/everything-claude-code.git
+git clone -b everything-zh https://github.com/gongxh0901/everything-claude-code-zh.git
 
 # 复制规则到用户配置目录
-cp -r everything-claude-code/rules/* ~/.claude/rules/
+cp -r everything-claude-code-zh/rules/* ~/.claude/rules/
 ```
 
 ### 项目级规则（仅适用于当前项目）
@@ -84,7 +84,7 @@ cp -r everything-claude-code/rules/* ~/.claude/rules/
 mkdir -p .claude/rules
 
 # 复制规则
-cp -r everything-claude-code/rules/* .claude/rules/
+cp -r everything-claude-code-zh/rules/* .claude/rules/
 ```
 
 ## 配置 MCP 服务器
@@ -170,7 +170,7 @@ claude --version
 如果遇到问题：
 
 1. 查看 [PLUGIN_SCHEMA_NOTES.md](.claude-plugin/PLUGIN_SCHEMA_NOTES.md) 了解插件配置要求
-2. 提交 Issue：https://github.com/gongxh0901/everything-claude-code/issues
+2. 提交 Issue：https://github.com/gongxh0901/everything-claude-code-zh/issues
 3. 参考原项目文档：https://github.com/affaan-m/everything-claude-code
 
 ## 下一步
