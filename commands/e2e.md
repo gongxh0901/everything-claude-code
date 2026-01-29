@@ -1,60 +1,60 @@
 ---
-description: Generate and run end-to-end tests with Playwright. Creates test journeys, runs tests, captures screenshots/videos/traces, and uploads artifacts.
+description: 使用 Playwright 生成并运行端到端测试。创建测试流程，运行测试，捕获截图/视频/追踪，并上传产物。
 ---
 
-# E2E Command
+# E2E 命令
 
-This command invokes the **e2e-runner** agent to generate, maintain, and execute end-to-end tests using Playwright.
+此命令调用 **e2e-runner** 代理来生成、维护和执行使用 Playwright 的端到端测试。
 
-## What This Command Does
+## 此命令的功能
 
-1. **Generate Test Journeys** - Create Playwright tests for user flows
-2. **Run E2E Tests** - Execute tests across browsers
-3. **Capture Artifacts** - Screenshots, videos, traces on failures
-4. **Upload Results** - HTML reports and JUnit XML
-5. **Identify Flaky Tests** - Quarantine unstable tests
+1. **生成测试流程** - 为用户流程创建 Playwright 测试
+2. **运行 E2E 测试** - 跨浏览器执行测试
+3. **捕获产物** - 失败时的截图、视频、追踪
+4. **上传结果** - HTML 报告和 JUnit XML
+5. **识别不稳定测试** - 隔离不稳定的测试
 
-## When to Use
+## 何时使用
 
-Use `/e2e` when:
-- Testing critical user journeys (login, trading, payments)
-- Verifying multi-step flows work end-to-end
-- Testing UI interactions and navigation
-- Validating integration between frontend and backend
-- Preparing for production deployment
+在以下情况下使用 `/e2e`：
+- 测试关键用户流程（登录、交易、支付）
+- 验证多步骤流程端到端工作
+- 测试 UI 交互和导航
+- 验证前端和后端之间的集成
+- 准备生产部署
 
-## How It Works
+## 工作原理
 
-The e2e-runner agent will:
+e2e-runner 代理将：
 
-1. **Analyze user flow** and identify test scenarios
-2. **Generate Playwright test** using Page Object Model pattern
-3. **Run tests** across multiple browsers (Chrome, Firefox, Safari)
-4. **Capture failures** with screenshots, videos, and traces
-5. **Generate report** with results and artifacts
-6. **Identify flaky tests** and recommend fixes
+1. **分析用户流程**并识别测试场景
+2. **生成 Playwright 测试**，使用页面对象模型模式
+3. **跨多个浏览器运行测试**（Chrome、Firefox、Safari）
+4. **捕获失败**，包括截图、视频和追踪
+5. **生成报告**，包含结果和产物
+6. **识别不稳定测试**并推荐修复
 
-## Example Usage
+## 使用示例
 
 ```
 User: /e2e Test the market search and view flow
 
 Agent (e2e-runner):
-# E2E Test Generation: Market Search and View Flow
+# E2E 测试生成：市场搜索和查看流程
 
-## Test Scenario Identified
+## 识别的测试场景
 
-**User Journey:** Market Search → View Results → Click Market → View Details
+**用户流程：** 市场搜索 → 查看结果 → 点击市场 → 查看详情
 
-**Test Coverage:**
-1. Navigate to markets page
-2. Perform semantic search
-3. Verify search results
-4. Click on first result
-5. Verify market details page loads
-6. Verify chart renders
+**测试覆盖：**
+1. 导航到市场页面
+2. 执行语义搜索
+3. 验证搜索结果
+4. 点击第一个结果
+5. 验证市场详情页面加载
+6. 验证图表渲染
 
-## Generated Test Code
+## 生成的测试代码
 
 ```typescript
 // tests/e2e/markets/search-and-view.spec.ts
@@ -156,7 +156,7 @@ test.describe('Market Search and View Flow', () => {
 })
 ```
 
-## Running Tests
+## 运行测试
 
 ```bash
 # Run the generated test
@@ -176,7 +176,7 @@ Artifacts generated:
 - playwright-report/index.html
 ```
 
-## Test Report
+## 测试报告
 
 ```
 ╔══════════════════════════════════════════════════════════════╗
@@ -199,25 +199,25 @@ Artifacts:
 View report: npx playwright show-report
 ```
 
-✅ E2E test suite ready for CI/CD integration!
+✅ E2E 测试套件已准备好 CI/CD 集成！
 ```
 
-## Test Artifacts
+## 测试产物
 
-When tests run, the following artifacts are captured:
+测试运行时，会捕获以下产物：
 
-**On All Tests:**
-- HTML Report with timeline and results
-- JUnit XML for CI integration
+**所有测试：**
+- 包含时间线和结果的 HTML 报告
+- 用于 CI 集成的 JUnit XML
 
-**On Failure Only:**
-- Screenshot of the failing state
-- Video recording of the test
-- Trace file for debugging (step-by-step replay)
-- Network logs
-- Console logs
+**仅失败时：**
+- 失败状态的截图
+- 测试的视频录制
+- 用于调试的追踪文件（逐步重放）
+- 网络日志
+- 控制台日志
 
-## Viewing Artifacts
+## 查看产物
 
 ```bash
 # View HTML report in browser
@@ -230,40 +230,40 @@ npx playwright show-trace artifacts/trace-abc123.zip
 open artifacts/search-results.png
 ```
 
-## Flaky Test Detection
+## 不稳定测试检测
 
-If a test fails intermittently:
+如果测试间歇性失败：
 
 ```
-⚠️  FLAKY TEST DETECTED: tests/e2e/markets/trade.spec.ts
+⚠️  检测到不稳定测试：tests/e2e/markets/trade.spec.ts
 
-Test passed 7/10 runs (70% pass rate)
+测试通过 7/10 次运行（70% 通过率）
 
-Common failure:
+常见失败：
 "Timeout waiting for element '[data-testid="confirm-btn"]'"
 
-Recommended fixes:
-1. Add explicit wait: await page.waitForSelector('[data-testid="confirm-btn"]')
-2. Increase timeout: { timeout: 10000 }
-3. Check for race conditions in component
-4. Verify element is not hidden by animation
+推荐修复：
+1. 添加显式等待：await page.waitForSelector('[data-testid="confirm-btn"]')
+2. 增加超时：{ timeout: 10000 }
+3. 检查组件中的竞态条件
+4. 验证元素未被动画隐藏
 
-Quarantine recommendation: Mark as test.fixme() until fixed
+隔离建议：在修复之前标记为 test.fixme()
 ```
 
-## Browser Configuration
+## 浏览器配置
 
-Tests run on multiple browsers by default:
-- ✅ Chromium (Desktop Chrome)
-- ✅ Firefox (Desktop)
-- ✅ WebKit (Desktop Safari)
-- ✅ Mobile Chrome (optional)
+测试默认在多个浏览器上运行：
+- ✅ Chromium（桌面 Chrome）
+- ✅ Firefox（桌面）
+- ✅ WebKit（桌面 Safari）
+- ✅ Mobile Chrome（可选）
 
-Configure in `playwright.config.ts` to adjust browsers.
+在 `playwright.config.ts` 中配置以调整浏览器。
 
-## CI/CD Integration
+## CI/CD 集成
 
-Add to your CI pipeline:
+添加到你的 CI 流水线：
 
 ```yaml
 # .github/workflows/e2e.yml
@@ -281,66 +281,66 @@ Add to your CI pipeline:
     path: playwright-report/
 ```
 
-## PMX-Specific Critical Flows
+## PMX 特定关键流程
 
-For PMX, prioritize these E2E tests:
+对于 PMX，优先考虑这些 E2E 测试：
 
-**🔴 CRITICAL (Must Always Pass):**
-1. User can connect wallet
-2. User can browse markets
-3. User can search markets (semantic search)
-4. User can view market details
-5. User can place trade (with test funds)
-6. Market resolves correctly
-7. User can withdraw funds
+**🔴 关键（必须始终通过）：**
+1. 用户可以连接钱包
+2. 用户可以浏览市场
+3. 用户可以搜索市场（语义搜索）
+4. 用户可以查看市场详情
+5. 用户可以进行交易（使用测试资金）
+6. 市场正确解决
+7. 用户可以提取资金
 
-**🟡 IMPORTANT:**
-1. Market creation flow
-2. User profile updates
-3. Real-time price updates
-4. Chart rendering
-5. Filter and sort markets
-6. Mobile responsive layout
+**🟡 重要：**
+1. 市场创建流程
+2. 用户资料更新
+3. 实时价格更新
+4. 图表渲染
+5. 过滤和排序市场
+6. 移动响应式布局
 
-## Best Practices
+## 最佳实践
 
-**DO:**
-- ✅ Use Page Object Model for maintainability
-- ✅ Use data-testid attributes for selectors
-- ✅ Wait for API responses, not arbitrary timeouts
-- ✅ Test critical user journeys end-to-end
-- ✅ Run tests before merging to main
-- ✅ Review artifacts when tests fail
+**应该做：**
+- ✅ 使用页面对象模型以提高可维护性
+- ✅ 使用 data-testid 属性作为选择器
+- ✅ 等待 API 响应，而不是任意超时
+- ✅ 端到端测试关键用户流程
+- ✅ 在合并到 main 之前运行测试
+- ✅ 测试失败时审查产物
 
-**DON'T:**
-- ❌ Use brittle selectors (CSS classes can change)
-- ❌ Test implementation details
-- ❌ Run tests against production
-- ❌ Ignore flaky tests
-- ❌ Skip artifact review on failures
-- ❌ Test every edge case with E2E (use unit tests)
+**不应该做：**
+- ❌ 使用脆弱的选择器（CSS 类可能会改变）
+- ❌ 测试实现细节
+- ❌ 对生产环境运行测试
+- ❌ 忽略不稳定测试
+- ❌ 失败时跳过产物审查
+- ❌ 使用 E2E 测试每个边界情况（使用单元测试）
 
-## Important Notes
+## 重要说明
 
-**CRITICAL for PMX:**
-- E2E tests involving real money MUST run on testnet/staging only
-- Never run trading tests against production
-- Set `test.skip(process.env.NODE_ENV === 'production')` for financial tests
-- Use test wallets with small test funds only
+**PMX 关键：**
+- 涉及真实资金的 E2E 测试必须仅在测试网/预发布环境上运行
+- 绝不对生产环境运行交易测试
+- 为财务测试设置 `test.skip(process.env.NODE_ENV === 'production')`
+- 仅使用少量测试资金的测试钱包
 
-## Integration with Other Commands
+## 与其他命令集成
 
-- Use `/plan` to identify critical journeys to test
-- Use `/tdd` for unit tests (faster, more granular)
-- Use `/e2e` for integration and user journey tests
-- Use `/code-review` to verify test quality
+- 使用 `/plan` 识别要测试的关键流程
+- 使用 `/tdd` 进行单元测试（更快、更细粒度）
+- 使用 `/e2e` 进行集成和用户流程测试
+- 使用 `/code-review` 验证测试质量
 
-## Related Agents
+## 相关代理
 
-This command invokes the `e2e-runner` agent located at:
+此命令调用位于以下位置的 `e2e-runner` 代理：
 `~/.claude/agents/e2e-runner.md`
 
-## Quick Commands
+## 快速命令
 
 ```bash
 # Run all E2E tests

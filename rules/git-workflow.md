@@ -1,6 +1,6 @@
-# Git Workflow
+# Git 工作流
 
-## Commit Message Format
+## 提交消息格式
 
 ```
 <type>: <description>
@@ -8,38 +8,38 @@
 <optional body>
 ```
 
-Types: feat, fix, refactor, docs, test, chore, perf, ci
+类型：feat、fix、refactor、docs、test、chore、perf、ci
 
-Note: Attribution disabled globally via ~/.claude/settings.json.
+注意：通过 ~/.claude/settings.json 全局禁用归属。
 
-## Pull Request Workflow
+## Pull Request 工作流
 
-When creating PRs:
-1. Analyze full commit history (not just latest commit)
-2. Use `git diff [base-branch]...HEAD` to see all changes
-3. Draft comprehensive PR summary
-4. Include test plan with TODOs
-5. Push with `-u` flag if new branch
+创建 PR 时：
+1. 分析完整的提交历史（不仅仅是最新提交）
+2. 使用 `git diff [base-branch]...HEAD` 查看所有更改
+3. 起草全面的 PR 摘要
+4. 包含带有待办事项的测试计划
+5. 如果是新分支，使用 `-u` 标志推送
 
-## Feature Implementation Workflow
+## 功能实现工作流
 
-1. **Plan First**
-   - Use **planner** agent to create implementation plan
-   - Identify dependencies and risks
-   - Break down into phases
+1. **首先规划**
+   - 使用 **planner** agent 创建实现计划
+   - 识别依赖项和风险
+   - 分解为阶段
 
-2. **TDD Approach**
-   - Use **tdd-guide** agent
-   - Write tests first (RED)
-   - Implement to pass tests (GREEN)
-   - Refactor (IMPROVE)
-   - Verify 80%+ coverage
+2. **TDD 方法**
+   - 使用 **tdd-guide** agent
+   - 首先编写测试（红）
+   - 实现以通过测试（绿）
+   - 重构（改进）
+   - 验证 80%+ 覆盖率
 
-3. **Code Review**
-   - Use **code-reviewer** agent immediately after writing code
-   - Address CRITICAL and HIGH issues
-   - Fix MEDIUM issues when possible
+3. **代码审查**
+   - 在编写代码后立即使用 **code-reviewer** agent
+   - 解决关键和高优先级问题
+   - 尽可能修复中等优先级问题
 
-4. **Commit & Push**
-   - Detailed commit messages
-   - Follow conventional commits format
+4. **提交和推送**
+   - 详细的提交消息
+   - 遵循约定式提交格式

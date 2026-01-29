@@ -1,55 +1,55 @@
 ---
-description: Comprehensive Go code review for idiomatic patterns, concurrency safety, error handling, and security. Invokes the go-reviewer agent.
+description: 对 Go 代码进行全面审查，包括惯用模式、并发安全、错误处理和安全性。调用 go-reviewer 代理。
 ---
 
-# Go Code Review
+# Go 代码审查
 
-This command invokes the **go-reviewer** agent for comprehensive Go-specific code review.
+此命令调用 **go-reviewer** 代理进行全面的 Go 特定代码审查。
 
-## What This Command Does
+## 此命令的功能
 
-1. **Identify Go Changes**: Find modified `.go` files via `git diff`
-2. **Run Static Analysis**: Execute `go vet`, `staticcheck`, and `golangci-lint`
-3. **Security Scan**: Check for SQL injection, command injection, race conditions
-4. **Concurrency Review**: Analyze goroutine safety, channel usage, mutex patterns
-5. **Idiomatic Go Check**: Verify code follows Go conventions and best practices
-6. **Generate Report**: Categorize issues by severity
+1. **识别 Go 更改**：通过 `git diff` 查找修改的 `.go` 文件
+2. **运行静态分析**：执行 `go vet`、`staticcheck` 和 `golangci-lint`
+3. **安全扫描**：检查 SQL 注入、命令注入、竞态条件
+4. **并发审查**：分析 goroutine 安全性、channel 使用、mutex 模式
+5. **惯用 Go 检查**：验证代码是否遵循 Go 约定和最佳实践
+6. **生成报告**：按严重程度对问题进行分类
 
-## When to Use
+## 何时使用
 
-Use `/go-review` when:
-- After writing or modifying Go code
-- Before committing Go changes
-- Reviewing pull requests with Go code
-- Onboarding to a new Go codebase
-- Learning idiomatic Go patterns
+在以下情况下使用 `/go-review`：
+- 编写或修改 Go 代码后
+- 提交 Go 更改之前
+- 审查包含 Go 代码的 pull request
+- 加入新的 Go 代码库
+- 学习惯用 Go 模式
 
-## Review Categories
+## 审查类别
 
-### CRITICAL (Must Fix)
-- SQL/Command injection vulnerabilities
-- Race conditions without synchronization
-- Goroutine leaks
-- Hardcoded credentials
-- Unsafe pointer usage
-- Ignored errors in critical paths
+### CRITICAL（必须修复）
+- SQL/命令注入漏洞
+- 没有同步的竞态条件
+- Goroutine 泄漏
+- 硬编码的凭据
+- 不安全的指针使用
+- 关键路径中忽略的错误
 
-### HIGH (Should Fix)
-- Missing error wrapping with context
-- Panic instead of error returns
-- Context not propagated
-- Unbuffered channels causing deadlocks
-- Interface not satisfied errors
-- Missing mutex protection
+### HIGH（应该修复）
+- 缺少带上下文的错误包装
+- Panic 而不是返回错误
+- Context 未传播
+- 导致死锁的无缓冲 channel
+- 接口未满足错误
+- 缺少 mutex 保护
 
-### MEDIUM (Consider)
-- Non-idiomatic code patterns
-- Missing godoc comments on exports
-- Inefficient string concatenation
-- Slice not preallocated
-- Table-driven tests not used
+### MEDIUM（考虑）
+- 非惯用代码模式
+- 导出项缺少 godoc 注释
+- 低效的字符串连接
+- Slice 未预分配
+- 未使用表驱动测试
 
-## Automated Checks Run
+## 运行的自动检查
 
 ```bash
 # Static analysis
@@ -66,35 +66,35 @@ go build -race ./...
 govulncheck ./...
 ```
 
-## Example Usage
+## 使用示例
 
 ```text
 User: /go-review
 
 Agent:
-# Go Code Review Report
+# Go 代码审查报告
 
-## Files Reviewed
-- internal/handler/user.go (modified)
-- internal/service/auth.go (modified)
+## 已审查的文件
+- internal/handler/user.go（已修改）
+- internal/service/auth.go（已修改）
 
-## Static Analysis Results
-✓ go vet: No issues
-✓ staticcheck: No issues
+## 静态分析结果
+✓ go vet：没有问题
+✓ staticcheck：没有问题
 
-## Issues Found
+## 发现的问题
 
-[CRITICAL] Race Condition
-File: internal/service/auth.go:45
-Issue: Shared map accessed without synchronization
+[CRITICAL] 竞态条件
+文件：internal/service/auth.go:45
+问题：共享 map 访问没有同步
 ```go
-var cache = map[string]*Session{}  // Concurrent access!
+var cache = map[string]*Session{}  // 并发访问！
 
 func GetSession(id string) *Session {
-    return cache[id]  // Race condition
+    return cache[id]  // 竞态条件
 }
 ```
-Fix: Use sync.RWMutex or sync.Map
+修复：使用 sync.RWMutex 或 sync.Map
 ```go
 var (
     cache   = map[string]*Session{}
@@ -108,41 +108,41 @@ func GetSession(id string) *Session {
 }
 ```
 
-[HIGH] Missing Error Context
-File: internal/handler/user.go:28
-Issue: Error returned without context
+[HIGH] 缺少错误上下文
+文件：internal/handler/user.go:28
+问题：返回错误没有上下文
 ```go
-return err  // No context
+return err  // 没有上下文
 ```
-Fix: Wrap with context
+修复：用上下文包装
 ```go
 return fmt.Errorf("get user %s: %w", userID, err)
 ```
 
-## Summary
-- CRITICAL: 1
-- HIGH: 1
-- MEDIUM: 0
+## 摘要
+- CRITICAL：1
+- HIGH：1
+- MEDIUM：0
 
-Recommendation: ❌ Block merge until CRITICAL issue is fixed
+建议：❌ 阻止合并，直到修复 CRITICAL 问题
 ```
 
-## Approval Criteria
+## 批准标准
 
-| Status | Condition |
+| 状态 | 条件 |
 |--------|-----------|
-| ✅ Approve | No CRITICAL or HIGH issues |
-| ⚠️ Warning | Only MEDIUM issues (merge with caution) |
-| ❌ Block | CRITICAL or HIGH issues found |
+| ✅ 批准 | 没有 CRITICAL 或 HIGH 问题 |
+| ⚠️ 警告 | 仅有 MEDIUM 问题（谨慎合并） |
+| ❌ 阻止 | 发现 CRITICAL 或 HIGH 问题 |
 
-## Integration with Other Commands
+## 与其他命令集成
 
-- Use `/go-test` first to ensure tests pass
-- Use `/go-build` if build errors occur
-- Use `/go-review` before committing
-- Use `/code-review` for non-Go specific concerns
+- 首先使用 `/go-test` 确保测试通过
+- 如果出现构建错误，使用 `/go-build`
+- 提交前使用 `/go-review`
+- 对非 Go 特定的关注使用 `/code-review`
 
-## Related
+## 相关
 
 - Agent: `agents/go-reviewer.md`
-- Skills: `skills/golang-patterns/`, `skills/golang-testing/`
+- Skills: `skills/golang-patterns/`、`skills/golang-testing/`

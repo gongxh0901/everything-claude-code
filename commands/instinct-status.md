@@ -1,21 +1,21 @@
 ---
 name: instinct-status
-description: Show all learned instincts with their confidence levels
+description: 显示所有学习到的本能及其置信度级别
 command: /instinct-status
 implementation: python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py status
 ---
 
-# Instinct Status Command
+# Instinct Status 命令
 
-Shows all learned instincts with their confidence scores, grouped by domain.
+显示所有学习到的本能及其置信度分数，按域分组。
 
-## Implementation
+## 实现
 
 ```bash
 python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py status
 ```
 
-## Usage
+## 用法
 
 ```
 /instinct-status
@@ -23,57 +23,57 @@ python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py status
 /instinct-status --low-confidence
 ```
 
-## What to Do
+## 要做的事
 
-1. Read all instinct files from `~/.claude/homunculus/instincts/personal/`
-2. Read inherited instincts from `~/.claude/homunculus/instincts/inherited/`
-3. Display them grouped by domain with confidence bars
+1. 从 `~/.claude/homunculus/instincts/personal/` 读取所有本能文件
+2. 从 `~/.claude/homunculus/instincts/inherited/` 读取继承的本能
+3. 按域分组显示它们，包含置信度条
 
-## Output Format
+## 输出格式
 
 ```
-📊 Instinct Status
+📊 本能状态
 ==================
 
-## Code Style (4 instincts)
+## 代码风格（4 个本能）
 
 ### prefer-functional-style
-Trigger: when writing new functions
-Action: Use functional patterns over classes
-Confidence: ████████░░ 80%
-Source: session-observation | Last updated: 2025-01-22
+触发：when writing new functions
+操作：Use functional patterns over classes
+置信度：████████░░ 80%
+来源：session-observation | 最后更新：2025-01-22
 
 ### use-path-aliases
-Trigger: when importing modules
-Action: Use @/ path aliases instead of relative imports
-Confidence: ██████░░░░ 60%
-Source: repo-analysis (github.com/acme/webapp)
+触发：when importing modules
+操作：Use @/ path aliases instead of relative imports
+置信度：██████░░░░ 60%
+来源：repo-analysis (github.com/acme/webapp)
 
-## Testing (2 instincts)
+## 测试（2 个本能）
 
 ### test-first-workflow
-Trigger: when adding new functionality
-Action: Write test first, then implementation
-Confidence: █████████░ 90%
-Source: session-observation
+触发：when adding new functionality
+操作：Write test first, then implementation
+置信度：█████████░ 90%
+来源：session-observation
 
-## Workflow (3 instincts)
+## 工作流（3 个本能）
 
 ### grep-before-edit
-Trigger: when modifying code
-Action: Search with Grep, confirm with Read, then Edit
-Confidence: ███████░░░ 70%
-Source: session-observation
+触发：when modifying code
+操作：Search with Grep, confirm with Read, then Edit
+置信度：███████░░░ 70%
+来源：session-observation
 
 ---
-Total: 9 instincts (4 personal, 5 inherited)
-Observer: Running (last analysis: 5 min ago)
+总计：9 个本能（4 个个人，5 个继承）
+观察者：运行中（上次分析：5 分钟前）
 ```
 
-## Flags
+## 标志
 
-- `--domain <name>`: Filter by domain (code-style, testing, git, etc.)
-- `--low-confidence`: Show only instincts with confidence < 0.5
-- `--high-confidence`: Show only instincts with confidence >= 0.7
-- `--source <type>`: Filter by source (session-observation, repo-analysis, inherited)
-- `--json`: Output as JSON for programmatic use
+- `--domain <name>`：按域过滤（code-style、testing、git 等）
+- `--low-confidence`：仅显示置信度 < 0.5 的本能
+- `--high-confidence`：仅显示置信度 >= 0.7 的本能
+- `--source <type>`：按来源过滤（session-observation、repo-analysis、inherited）
+- `--json`：以 JSON 格式输出用于编程使用
