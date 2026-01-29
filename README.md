@@ -285,8 +285,8 @@ Duplicate hooks file detected: ./hooks/hooks.json resolves to already-loaded fil
 The easiest way to use this repo - install as a Claude Code plugin:
 
 ```bash
-# Add this repo as a marketplace (指定 learning-zh 分支)
-/plugin marketplace add gongxh0901/everything-claude-code#learning-zh
+# Add this repo as a marketplace (指定 everything-zh 分支)
+/plugin marketplace add gongxh0901/everything-claude-code#everything-zh
 
 # Install the plugin
 /plugin install everything-claude-code-zh@everything-claude-code-zh
@@ -301,7 +301,7 @@ Or add directly to your `~/.claude/settings.json`:
       "source": {
         "source": "github",
         "repo": "gongxh0901/everything-claude-code",
-        "ref": "learning-zh"
+        "ref": "everything-zh"
       }
     }
   },
@@ -316,8 +316,8 @@ This gives you instant access to all commands, agents, skills, and hooks.
 > **Note:** The Claude Code plugin system does not support distributing `rules` via plugins ([upstream limitation](https://code.claude.com/docs/en/plugins-reference)). You need to install rules manually:
 >
 > ```bash
-> # Clone the repo first (learning-zh 分支)
-> git clone -b learning-zh https://github.com/gongxh0901/everything-claude-code.git
+> # Clone the repo first (everything-zh 分支)
+> git clone -b everything-zh https://github.com/gongxh0901/everything-claude-code.git
 >
 > # Option A: User-level rules (applies to all projects)
 > cp -r everything-claude-code/rules/* ~/.claude/rules/
@@ -339,8 +339,8 @@ This gives you instant access to all commands, agents, skills, and hooks.
 If you prefer manual control over what's installed:
 
 ```bash
-# Clone the repo (learning-zh 分支)
-git clone -b learning-zh https://github.com/gongxh0901/everything-claude-code.git
+# Clone the repo (everything-zh 分支)
+git clone -b everything-zh https://github.com/gongxh0901/everything-claude-code.git
 
 # Copy agents to your Claude config
 cp everything-claude-code/agents/*.md ~/.claude/agents/
