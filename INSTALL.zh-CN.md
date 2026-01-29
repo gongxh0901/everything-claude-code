@@ -7,8 +7,8 @@
 这是最简单的安装方式，可以直接获得所有命令、代理、技能和钩子：
 
 ```bash
-# 添加插件市场（使用 everything-zh 分支）
-/plugin marketplace add gongxh0901/everything-claude-code-zh#everything-zh
+# 添加插件市场
+/plugin marketplace add gongxh0901/everything-claude-code-zh
 
 # 安装插件
 /plugin install everything-claude-code-zh@everything-claude-code-zh
@@ -24,8 +24,7 @@
     "everything-claude-code-zh": {
       "source": {
         "source": "github",
-        "repo": "gongxh0901/everything-claude-code-zh",
-        "ref": "everything-zh"
+        "repo": "gongxh0901/everything-claude-code-zh"
       }
     }
   },
@@ -42,8 +41,8 @@
 如果你想完全控制安装的内容：
 
 ```bash
-# 1. 克隆仓库（everything-zh 分支）
-git clone -b everything-zh https://github.com/gongxh0901/everything-claude-code-zh.git
+# 1. 克隆仓库
+git clone https://github.com/gongxh0901/everything-claude-code-zh.git
 cd everything-claude-code-zh
 
 # 2. 复制代理（Agents）
@@ -71,7 +70,7 @@ cp -r skills/* ~/.claude/skills/
 
 ```bash
 # 克隆仓库
-git clone -b everything-zh https://github.com/gongxh0901/everything-claude-code-zh.git
+git clone https://github.com/gongxh0901/everything-claude-code-zh.git
 
 # 复制规则到用户配置目录
 cp -r everything-claude-code-zh/rules/* ~/.claude/rules/
