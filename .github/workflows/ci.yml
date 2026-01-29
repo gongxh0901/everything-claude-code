@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [learning-zh]
   pull_request:
-    branches: [main]
+    branches: [learning-zh]
 
 # Prevent duplicate runs
 concurrency:
