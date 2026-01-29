@@ -1,7 +1,7 @@
 {
   "name": "everything-claude-code-zh",
   "owner": {
-    "name": "bitgong",
+    "name": "gongxh0901",
     "email": "gongxinhai@kunpo.cn"
   },
   "metadata": {
@@ -13,10 +13,10 @@
       "source": "./",
       "description": "完整收集的代理、技能、钩子、命令和规则，经过 10+ 个月的密集日常使用演进",
       "author": {
-        "name": "bitgong"
+        "name": "gongxh0901"
       },
-      "homepage": "https://github.com/bitgong/everything-claude-code-zh",
-      "repository": "https://github.com/bitgong/everything-claude-code-zh",
+      "homepage": "https://github.com/gongxh0901/everything-claude-code/tree/learning-zh",
+      "repository": "https://github.com/gongxh0901/everything-claude-code",
       "license": "MIT",
       "keywords": [
         "agents",

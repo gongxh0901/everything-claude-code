@@ -1,6 +1,6 @@
-# Everything Claude Code
+# Everything Claude Code (中文版)
 
-[![Stars](https://img.shields.io/github/stars/affaan-m/everything-claude-code?style=flat)](https://github.com/affaan-m/everything-claude-code/stargazers)
+[![Stars](https://img.shields.io/github/stars/gongxh0901/everything-claude-code?style=flat)](https://github.com/gongxh0901/everything-claude-code/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Shell](https://img.shields.io/badge/-Shell-4EAA25?logo=gnu-bash&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white)
@@ -12,9 +12,11 @@
   <span>简体中文</span>
 </p>
 
-**来自 Anthropic 黑客马拉松获胜者的完整 Claude Code 配置集合。**
+**来自 Anthropic 黑客马拉松获胜者的完整 Claude Code 配置集合（中文翻译版）。**
 
 生产级代理、技能、钩子、命令、规则和 MCP 配置，经过 10 多个月构建真实产品的密集日常使用而演化。
+
+> 本项目为 [everything-claude-code](https://github.com/affaan-m/everything-claude-code) 的中文翻译版本，由 [@gongxh0901](https://github.com/gongxh0901) 维护。
 
 ---
 

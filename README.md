@@ -1,8 +1,8 @@
-**Language:** English | [繁體中文](docs/zh-TW/README.md)
+**Language:** [English (Original)](https://github.com/affaan-m/everything-claude-code) | 简体中文
 
-# Everything Claude Code
+# Everything Claude Code (中文版)
 
-[![Stars](https://img.shields.io/github/stars/affaan-m/everything-claude-code?style=flat)](https://github.com/affaan-m/everything-claude-code/stargazers)
+[![Stars](https://img.shields.io/github/stars/gongxh0901/everything-claude-code?style=flat)](https://github.com/gongxh0901/everything-claude-code/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Shell](https://img.shields.io/badge/-Shell-4EAA25?logo=gnu-bash&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white)
@@ -10,13 +10,20 @@
 ![Markdown](https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white)
 
 <p align="left">
-  <span>English</span> |
-  <a href="README.zh-CN.md">简体中文</a>
+  <span>简体中文</span> |
+  <a href="https://github.com/affaan-m/everything-claude-code">English (Original)</a>
 </p>
 
-**The complete collection of Claude Code configs from an Anthropic hackathon winner.**
+**来自 Anthropic 黑客马拉松获奖者的完整 Claude Code 配置（中文翻译版）。**
 
-Production-ready agents, skills, hooks, commands, rules, and MCP configurations evolved over 10+ months of intensive daily use building real products.
+生产级代理、技能、钩子、命令、规则和 MCP 配置，经过 10+ 个月密集日常使用演进而来。
+
+> 📢 **关于本项目**
+>
+> 这是 [everything-claude-code](https://github.com/affaan-m/everything-claude-code) 的中文翻译版本。
+> - 原作者：[@affaanmustafa](https://x.com/affaanmustafa)
+> - 中文维护：[@gongxh0901](https://github.com/gongxh0901)
+> - 原项目 Star History: [![Original Repo](https://img.shields.io/github/stars/affaan-m/everything-claude-code?style=social)](https://github.com/affaan-m/everything-claude-code)
 
 ---
 
@@ -278,11 +285,11 @@ Duplicate hooks file detected: ./hooks/hooks.json resolves to already-loaded fil
 The easiest way to use this repo - install as a Claude Code plugin:
 
 ```bash
-# Add this repo as a marketplace
-/plugin marketplace add affaan-m/everything-claude-code
+# Add this repo as a marketplace (指定 learning-zh 分支)
+/plugin marketplace add gongxh0901/everything-claude-code#learning-zh
 
 # Install the plugin
-/plugin install everything-claude-code@everything-claude-code
+/plugin install everything-claude-code-zh@everything-claude-code-zh
 ```
 
 Or add directly to your `~/.claude/settings.json`:
@@ -290,15 +297,16 @@ Or add directly to your `~/.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "everything-claude-code": {
+    "everything-claude-code-zh": {
       "source": {
         "source": "github",
-        "repo": "affaan-m/everything-claude-code"
+        "repo": "gongxh0901/everything-claude-code",
+        "ref": "learning-zh"
       }
     }
   },
   "enabledPlugins": {
-    "everything-claude-code@everything-claude-code": true
+    "everything-claude-code-zh@everything-claude-code-zh": true
   }
 }
 ```
@@ -308,11 +316,16 @@ This gives you instant access to all commands, agents, skills, and hooks.
 > **Note:** The Claude Code plugin system does not support distributing `rules` via plugins ([upstream limitation](https://code.claude.com/docs/en/plugins-reference)). You need to install rules manually:
 >
 > ```bash
-> # Clone the repo first
-> git clone https://github.com/affaan-m/everything-claude-code.git
+> # Clone the repo first (learning-zh 分支)
+> git clone -b learning-zh https://github.com/gongxh0901/everything-claude-code.git
 >
 > # Option A: User-level rules (applies to all projects)
 > cp -r everything-claude-code/rules/* ~/.claude/rules/
+>
+> # Option B: Project-level rules (applies to current project only)
+> mkdir -p .claude/rules
+> cp -r everything-claude-code/rules/* .claude/rules/
+> ```
 >
 > # Option B: Project-level rules (applies to current project only)
 > mkdir -p .claude/rules
@@ -326,8 +339,8 @@ This gives you instant access to all commands, agents, skills, and hooks.
 If you prefer manual control over what's installed:
 
 ```bash
-# Clone the repo
-git clone https://github.com/affaan-m/everything-claude-code.git
+# Clone the repo (learning-zh 分支)
+git clone -b learning-zh https://github.com/gongxh0901/everything-claude-code.git
 
 # Copy agents to your Claude config
 cp everything-claude-code/agents/*.md ~/.claude/agents/
@@ -483,6 +496,10 @@ These configs work for my workflow. You should:
 
 ## Star History
 
+### 本项目
+[![Star History Chart](https://api.star-history.com/svg?repos=gongxh0901/everything-claude-code&type=Date)](https://star-history.com/#gongxh0901/everything-claude-code&Date)
+
+### 原项目
 [![Star History Chart](https://api.star-history.com/svg?repos=affaan-m/everything-claude-code&type=Date)](https://star-history.com/#affaan-m/everything-claude-code&Date)
 
 ---
